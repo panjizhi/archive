@@ -1,8 +1,7 @@
 # fe之路 #
 前端学习，前端琐碎记录！
-================================================
 
-## 首先，IE6很傻 ##
+## IE6很傻 ##
 1. IE6不能支持position:fixed
 2. 对background-color处理不够聪明
     background-color: #4d4d4d;
