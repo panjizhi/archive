@@ -1,12 +1,13 @@
 前端琐记
 ====
-* 首先当然是IE6
+* IE6，站到前面来！
 * z-index
 * flow
 
-首先当然是IE6
+IE6，站到前面来！
 ----
 **1. 不能支持*position:fixed*;**
+
 
 **2. 对background-color处理不够聪明(IE7也一样);**
 
@@ -19,12 +20,14 @@
 >    `background-color: rgba(0,0,0,0.7);`    
 >    `*background-color: #4d4d4d;`
 
+
 **3. 不能支持outline(IE7也一样)**
 
 IE6/7下清除元素的outline应该使用*hidefocus="true"*属性，如下：
 
 >    `outline: 0;//IE>=8`    
 >    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
+
 
 **4. **
     
