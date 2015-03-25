@@ -15,7 +15,7 @@ fe之路，前端琐碎
 `background-color: rgba(0,0,0,0.7);`    
 `*background-color: #4d4d4d;`
 
-3. 不能支持outline(IE7也一样)
+3. 不能支持outline(IE7也一样)    
 IE6/7下清除元素的outline应该使用*hidefocus="true"*属性，如下：
 `outline: 0;//IE>=8`    
 `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
