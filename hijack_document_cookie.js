@@ -1,6 +1,6 @@
 ;(function(){
     if(Object.getOwnPropertyDescriptor(document, 'cookie')){ // chrome
-        var _cDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie')
+        var _cDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie');
             
         Object.defineProperty(document, 'cookie', {
             value: _cDescriptor.value,
