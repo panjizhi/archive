@@ -1,46 +1,44 @@
+//
+//  通过重写document.cookie的accessor descriptor实现cookie读/写监控
+//
+//  当前测试环境: 
+//  OS：windows 7 64bit
+//  Browsers：IE11/10/9, Firefox 36.0.4
+//
 ;(function(){
-    if(Object.getOwnPropertyDescriptor(document, 'cookie')){ // chrome
-        var _cDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie');
-            
-        Object.defineProperty(document, 'cookie', {
-            value: _cDescriptor.value,
-            writable: _cDescriptor.writable,
-            enumerable: _cDescriptor.enumerable,
-            configurable: _cDescriptor.configurable
-        });
-    }else if(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(document), 'cookie')){// firefox, IE9/10
-        var _cDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(document), 'cookie'),
-            _get = _cDescriptor.get || function(){console.log('Error!')},
+    var _set, _get,
+        _cDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie') || // chrome 41.0.2272.118 m
+                       Object.getOwnPropertyDescriptor(Object.getPrototypeOf(document), 'cookie') || // firefox 36.0.4, IE9/10
+                       Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');// IE11
+                       
+    if(_cDescriptor){
+        if(_cDescriptor.hasOwnProperty('value')){       // chrome 41.0.2272.118 m
+            Object.defineProperty(document, 'cookie', { //data descriptor
+                value: _cDescriptor.value,
+                writable: _cDescriptor.writable,
+                enumerable: _cDescriptor.enumerable,
+                configurable: _cDescriptor.configurable
+            });
+        }else{ // accessor descriptor
+            _get = _cDescriptor.get || function(){console.log('Error!')};
             _set = _cDescriptor.set || function(){console.log('Error!')};
-
-        Object.defineProperty(document, 'cookie', {
-            get: function () {
-                console.log('get cookie action!');
-                return _get.call(document);
-            },
-            set: function (value) {
-                console.log('set cookie action!');
-                return _set.call(document, value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-    }else if(Object.getOwnPropertyDescriptor(Document.prototype, 'cookie')){// IE11
-        var _cDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie'),
-            _get = _cDescriptor.get || function(){console.log('Error!')},
-            _set = _cDescriptor.set || function(){console.log('Error!')};
-
-        Object.defineProperty(document, 'cookie', {
-            get: function () {
-                console.log('get cookie action!');
-                return _get.call(document);
-            },
-            set: function (value) {
-                console.log('set cookie action!');
-                return _set.call(document, value);
-            },
-            enumerable: true,
-            configurable: true
-        });
+            Object.defineProperty(document, 'cookie', {
+                get: function () {
+                    console.log('hijack get cookie action!');
+                    return _get.call(document);
+                },
+                set: function (value) {
+                    console.log('hijack set cookie action!');
+                    return _set.call(document, value);
+                },
+                enumerable: true,
+                configurable: true
+            });            
+        }    
     }
 })();
+
+// test code
+console.log(document.cookie);
+document.cookie = "hj_author=x3xtxt";
+console.log(document.cookie);
