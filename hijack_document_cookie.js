@@ -38,7 +38,7 @@
     }
 })();
 
-// test code
+// test code snippet 
 console.log(document.cookie);
 document.cookie = "hj_author=x3xtxt";
 console.log(document.cookie);
