@@ -17,7 +17,7 @@
                 value: _cDescriptor.value,
                 writable: _cDescriptor.writable,
                 enumerable: _cDescriptor.enumerable,
-                configurable: _cDescriptor.configurable
+                configurable: false
             });
         }else{ // accessor descriptor
             _get = _cDescriptor.get || function(){console.log('Error!')};
@@ -32,7 +32,7 @@
                     return _set.call(document, value);
                 },
                 enumerable: true,
-                configurable: true
+                configurable: false
             });            
         }    
     }
