@@ -7,7 +7,7 @@
 //
 ;(function(){
     var _set, _get,
-        _cDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie') || // chrome 41.0.2272.118 m
+        _cDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie') || // chrome 41.0.2272.118 m, IE8(Internet Explorer 8 standards mode supports DOM objects but not user-defined objects. The enumerable and configurable attributes can be specified, but they are not used.)
                        Object.getOwnPropertyDescriptor(Object.getPrototypeOf(document), 'cookie') || // firefox 36.0.4, IE9/10
                        Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');// IE11
                        
