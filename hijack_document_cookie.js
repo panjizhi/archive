@@ -3,11 +3,11 @@
 //
 //  当前测试环境: 
 //  OS：windows 7 64bit
-//  Browsers：IE11/10/9, Firefox 36.0.4
+//  Browsers：IE8/9/10/11, Firefox 36.0.4, chrome 41.0.2272.118 m
 //
 ;(function(){
     var hijackProperty = {}, 
-        iframeWindow = null, 
+        iframeDocument = null, 
         _setter, 
         _getter, 
                        // type: data descriptor
@@ -29,21 +29,20 @@
     }
     
     function nativeGetter(){
-        //iframeWindow['getCookie']();
-        return iframeWindow.document.cookie;
+        return iframeDocument.cookie;
     }
     
     function nativeSetter(newValue){
-        //iframeWindow['setCookie'](newValue);
-        return iframeWindow.document.cookie = newValue;
+        return iframeDocument.cookie = newValue;
     }
     
     if(_descriptor){
         if(_descriptor.hasOwnProperty('value')){ // Browsers: chrome 41.0.2272.118 m, IE8; Type: data descriptor
             hijackProperty = { // accessor descriptor
                 get: function(){
-                    hijacking(_descriptor.value, 'get');
-                    return nativeGetter();
+                    var ret = nativeGetter();
+                    hijacking(ret, 'get');
+                    return ret;
                 },
                 set: function(newValue){
                     hijacking(newValue, 'set');
@@ -61,7 +60,7 @@
                 iframe.height = 0;
                 iframe.setAttribute('src', 'http://domain/iframe4nativecall.html');
                 document.body.appendChild(iframe);
-                iframeWindow = iframe.contentWindow;                
+                iframeDocument = iframe.contentDocument || iframe.contentWindow.document;                
             })();
         }else{ // accessor descriptor
             _getter = descriptor.get || function(){console.log('Error!')};
