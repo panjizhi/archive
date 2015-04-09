@@ -23,9 +23,9 @@
                        // browsers: IE11
                        Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
                        
-    function hijacking(newValue, type){
+    function hijacking(value, type){
         type = type || 'get';
-        console.log('Cookies hijacking(' + type + '): \n' + newValue);        
+        console.log('Cookies hijacking(' + type + '): \n' + value);        
     }
     
     function nativeCall(newValue){
