@@ -68,8 +68,8 @@ try{
                     iframeDocument = iframe.contentDocument || iframe.contentWindow.document;                
                 })();
             }else if(_descriptor.hasOwnProperty('get') && _descriptor.hasOwnProperty('set')){ // accessor descriptor
-                _getter = descriptor.get || function(){console.log('Error: native getter not found!')};
-                _setter = descriptor.set || function(){console.log('Error: native setter not found!')};
+                _getter = _descriptor.get || function(){console.log('Error: native getter not found!')};
+                _setter = _descriptor.set || function(){console.log('Error: native setter not found!')};
                 Object.defineProperty(document, 'cookie', {
                     get: function () {
                         var ret = _getter.call(document);
