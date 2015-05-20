@@ -1,5 +1,5 @@
 /**
- *  @file cookie_hijack.js
+ *  @file hijack_document_cookie.js
  *  @author panjizhi
  *  @date 2015/04/10
  *  
