@@ -1,9 +1,9 @@
 /**
- *  @file hijack_document_cookie.js
+ *  @file cookie_hijacking.js
  *  @author panjizhi
  *  @date 2015/04/10
  *  
- *  重写document.cookie的data/accessor descriptor实现cookie读/写监控
+ *  重写document.cookie的data/accessor descriptor, 监测前端js对浏览器cookie的读/写操作
  *
  *  测试环境:
  *  OS：windows 7 64bit
@@ -68,7 +68,7 @@ try {
 				_iframe.width = 0;
 				_iframe.height = 0;
 				_iframe.border = 0;
-				_iframe.setAttribute('src', '/iframe4nativecall.html');
+				_iframe.setAttribute('src', 'nativecall.html');
 				_iframe.style.display = 'none';
 				if (_iframe.attachEvent) {
 					_iframe.attachEvent("onload", replaceDescriptor);
