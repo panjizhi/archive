@@ -3,6 +3,7 @@
 - 还记得IE6吗
 - class命名规范
 - z-index属性
+- inline-block间距
 - to be continue
 
 ## 写在最前面 ##
@@ -73,6 +74,10 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level，只有比较的元素处于同一个stack level，z-index比较才有意义。非定位元素的stack context为根元素节点。
 
 <http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
+
+## inline-block间距 ##
+
+显示样式为inline-block的元素之间存在的空格字符会产生额外间距。
 
 
 
