@@ -6,7 +6,7 @@
 
 IE6，站到前面来！
 ----
-**1. 不能支持*position:fixed*;**
+**1. 不支持*position:fixed*;**
 
 
 **2. 对background-color处理不够聪明(IE7也一样);**
