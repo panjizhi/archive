@@ -5,16 +5,18 @@
 - flow
 
 ## 写在最前面 ##
-*HTML结构必须合乎自然*
+确保*HTML结构合乎自然观感*总是值得的！
 
 ## 还记得IE6吗 ##
-### 1. 不支持*position:fixed*; ###
+1. 不支持*position:fixed*;
 
+2. 只对IE6生效
+>/* IE6 */
+>#once { _color: blue }
 
-### 2. 对background-color处理不够聪明(IE7也一样); ###
-
-
-
+>/* IE6, IE7 */
+>#doce { *color: blue; /* or #color: blue */ }
+[详细参考](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
 
 **3. 不能支持outline(IE7也一样)**
 
