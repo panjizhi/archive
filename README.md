@@ -11,10 +11,9 @@
 
 ## 还记得IE6吗 ##
 
-1. 不支持*position:fixed;*
+- 不支持*position:fixed;*
 
-
-2. 只对IE6生效（css样式名称以下划线开头）
+- 只对IE6生效（css样式名称以下划线开头）
 
 >    `/* IE6 */`
 
@@ -24,10 +23,9 @@
 
 >    `#doce { *color: blue; /* or #color: blue */ }`
 
-[http://www.paulirish.com/2009/browser-specific-css-hacks/](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
+<http://www.paulirish.com/2009/browser-specific-css-hacks/> 
 
-
-3. 不支持outline(IE7同样不支持)
+- 不支持outline(IE7同样不支持)
 
 IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
@@ -36,17 +34,17 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 >    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
 
 
-4. 触发hasLayout(IE6/7)
+- 触发hasLayout(IE6/7)
 
 >    `zoom: 1;`
 
 很多时候，IE6、IE7下的布局bug触发hasLayout即可解决。
 
-[https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx](https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx)
+<https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
 
-[http://riny.net/2013/haslayout/](http://riny.net/2013/haslayout/)
+<http://riny.net/2013/haslayout/>
 
-5. inline-block(IE6/7)
+- inline-block(IE6/7)
 
 >    `#selecotr {`
 
@@ -65,15 +63,15 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 1996年发布的CSS1规范，1998年发布的CSS2规范不允许在class和id属性中使用下划线，除非被转义过，而各个浏览器厂商的早期版本对此标准支持极不一致。
 
 * 参考：*
-1. [https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names)
+1. <https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names>
 
-2. [http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines](http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines)
+2. <http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines>
 
 ## z-index属性 ##
 
 z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level，只有比较的元素处于同一个stack level，z-index比较才有意义。非定位元素的stack context为根元素节点。
 
-[http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index](http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index)
+<http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
 
 
 
