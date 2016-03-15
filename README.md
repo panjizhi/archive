@@ -45,7 +45,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 <https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
 
-- inline-block
+- inline-block样式
 
 IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如下：
 
@@ -67,6 +67,7 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 通过设置子div的`position: absolute;`解决，fixed或者float都不能解决此问题。
 
 - `overflow: hidden;`的问题
+
     IE6、IE7中，父元素设置`display: none;`，若子元素尺寸超过父元素，且设置了相对定位`position: relative;`，父元素必须设置`position: relative;`，否则子元素尺寸将溢出。
 
 ## class命名规范 ##
@@ -90,6 +91,7 @@ z-index只适用于定位元素（relative、absolute、fixed），z-index指定
 ## inline-block间距 ##
 
     显示样式为inline-block的元素之间存在的空格字符会产生额外间距。
+    
     `The spacing effect is because of the font's spacing setting, so you must reset it for the inlined elements and set it again for the content within.`
 
 
