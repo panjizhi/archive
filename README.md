@@ -90,8 +90,8 @@ z-index只适用于定位元素（relative、absolute、fixed），z-index指定
 
 ## inline-block间距 ##
 
-    显示样式为inline-block的元素之间存在的空格字符会产生额外间距。
-    
+display取值为inline-block的元素之间的空格字符会产生水平间距。
+
     `The spacing effect is because of the font's spacing setting, so you must reset it for the inlined elements and set it again for the content within.`
 
 
