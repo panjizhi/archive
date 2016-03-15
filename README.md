@@ -23,7 +23,7 @@
 
 >    `#doce { *color: blue; /* or #color: blue */ }`
 
-[详细参考](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
+[http://www.paulirish.com/2009/browser-specific-css-hacks/](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
 
 3. 不支持outline(IE7同样不支持)
 
@@ -46,9 +46,13 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 5. inline-block(IE6/7)
 
 >    `#selecotr {`
+
 >    `    display: inline-block;`
+
 >    `    *display: inline;`
+
 >    `    zoom: 1;`
+
 >    `}`
 
 ## class命名规范 ##
