@@ -15,36 +15,41 @@
 
 2. 只对IE6生效（css样式名称以下划线开头）
 
->    /* IE6 */
->    #once { _color: blue }
+>        `/* IE6 */`
 
->    /* IE6, IE7 */
->    #doce { *color: blue; /* or #color: blue */ }
+>        `#once { _color: blue }`
+
+>        `/* IE6, IE7 */`
+
+>        `#doce { *color: blue; /* or #color: blue */ }`
 
 [详细参考](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
 
 3. 不支持outline(IE7同样不支持)
+
 IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
->    outline: 0;//IE>=8    
->    <a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->
+>    `outline: 0;//IE>=8`
+
+>    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
 
 4. 触发hasLayout(IE6/7)
 
->    zoom: 1;
+>    `zoom: 1;`
 
 很多时候，IE6、IE7下的布局bug触发hasLayout即可解决。
 
 [https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx](https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx)
+
 [http://riny.net/2013/haslayout/](http://riny.net/2013/haslayout/)
 
 5. inline-block(IE6/7)
 
->    #selecotr {
->        display: inline-block;
->        *display: inline;
->        zoom: 1;
->    }
+>    `#selecotr {`
+>    `    display: inline-block;`
+>    `    *display: inline;`
+>    `    zoom: 1;`
+>    `}`
 
 ## class命名规范 ##
 
