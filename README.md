@@ -57,6 +57,13 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 >    `}`
 
+
+- block元素嵌套问题
+
+两个div嵌套的情况下，如果被包含的子div宽度超过父div宽度，则父div宽度自动延伸，直到能包含子div。
+
+通过设置子div的`position: absolute;`解决，fixed或者float都不能解决此问题。
+
 ## class命名规范 ##
 
 *HTML代码中标签元素的id和class取值应避免包含下划线，使用连字符代替。*
