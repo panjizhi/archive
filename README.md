@@ -1,6 +1,6 @@
 # 前端笔记 #
 - 写在最前面
-- 还记得IE6吗
+- 古老的IE6、IE7
 - class命名规范
 - z-index属性
 - inline-block间距
@@ -10,11 +10,11 @@
 
 *确保「HTML结构合乎自然观感」总是值得的*
 
-## 还记得IE6吗 ##
+## 古老的IE6、IE7 ##
 
-- 不支持*position:fixed;*
+- IE6不支持`position:fixed;`
 
-- 只对IE6生效（css样式名称以下划线开头）
+- 选择生效CSS
 
 >    `/* IE6 */`
 
@@ -26,7 +26,7 @@
 
 <http://www.paulirish.com/2009/browser-specific-css-hacks/> 
 
-- 不支持outline(IE7同样不支持)
+- 不支持outline
 
 IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
@@ -35,7 +35,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 >    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
 
 
-- 触发hasLayout(IE6/7)
+- 触发hasLayout
 
 >    `zoom: 1;`
 
@@ -45,7 +45,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 <http://riny.net/2013/haslayout/>
 
-- inline-block(IE6/7)
+- inline-block
 
 针对inline元素触发hasLayout即可，如下：
 
@@ -60,11 +60,14 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 >    `}`
 
 
-- block元素嵌套问题
+- IE6下block元素嵌套
 
     两个div嵌套的情况下，如果被包含的子div宽度超过父div宽度，则父div宽度自动延伸，直到能包含子div。
 
 通过设置子div的`position: absolute;`解决，fixed或者float都不能解决此问题。
+
+- `overflow: hidden;`的问题
+    IE6、IE7中，父元素设置`display: none;`，若子元素尺寸超过父元素，且设置了相对定位`position: relative;`，父元素必须设置`position: relative;`，否则子元素尺寸将溢出。
 
 ## class命名规范 ##
 
