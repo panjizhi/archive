@@ -20,7 +20,7 @@
 
 [详细参考](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
 
-**3. 不能支持outline(IE7也一样)**
+3. 不支持outline(IE7也一样)
 
 IE6/7下清除元素的outline应该使用*hidefocus="true"*属性，如下：
 
@@ -28,6 +28,3 @@ IE6/7下清除元素的outline应该使用*hidefocus="true"*属性，如下：
 >    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
 
 
-**4. **
-    
-    
