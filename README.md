@@ -82,20 +82,22 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 
 ## z-index属性 ##
 
-z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level，只有比较的元素处于同一个stacking context，z-index比较才有意义。非定位元素的stack context为根元素节点。
+z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level。元素的展现层次首先看stacking context的z-index值，处于同一个stacking context下的元素才比较各种的z-index值。
 
 <http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
 
 ## inline-block间距 ##
 
-display取值为inline-block的元素之间空格字符会产生水平间距。
+display取值为inline-block的元素之间空格字符会引入水平间距。
 
     The spacing effect is because of the font's spacing setting, 
     so you must reset it for the inlined elements and set it again for the content within.
 
-## inline-block对其 ##
+## inline-block垂直对齐 ##
 
-水平向并排展现的inline-block元素，最后一个元素常会出现顶部不对其的问题。通过添加`overflow: hidden;`解决。
+水平方向并排展现的inline-block元素，最后一个元素常会出现顶部不能对齐的问题。
+
+通过添加`overflow: hidden;`解决。
 
     The baseline of an 'inline-block' is the baseline of its last line box in the normal flow, 
     unless it has either no in-flow line boxes or if its 'overflow' property has a computed value 
