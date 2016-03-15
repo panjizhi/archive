@@ -82,7 +82,7 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 
 ## z-index属性 ##
 
-z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level，只有比较的元素处于同一个stack level，z-index比较才有意义。非定位元素的stack context为根元素节点。
+z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level，只有比较的元素处于同一个stacking context，z-index比较才有意义。非定位元素的stack context为根元素节点。
 
 <http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
 
