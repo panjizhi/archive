@@ -47,7 +47,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 - inline-block样式
 
-IE6/7下对&nbsp;*inline元素*&nbsp;触发hasLayout即可获得inline-block布局，如下：
+IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如下：
 
 >    `#selecotr {`
 
@@ -64,7 +64,7 @@ IE6/7下对&nbsp;*inline元素*&nbsp;触发hasLayout即可获得inline-block布�
 
     两个div嵌套的情况下，如果被包含的子div宽度超过父div宽度，则父div宽度自动延伸，直到能包含子div。
 
-通过设置子div的`position: absolute;`解决，fixed或者float都不能解决此问题。
+    通过设置子div的`position: absolute;`解决，fixed或者float都不能解决此问题。
 
 - `overflow: hidden;`的问题
 
@@ -75,8 +75,6 @@ IE6/7下对&nbsp;*inline元素*&nbsp;触发hasLayout即可获得inline-block布�
 *HTML代码中标签元素的id和class取值应避免包含下划线，使用连字符代替。*
 
 1996年发布的CSS1规范，1998年发布的CSS2规范不允许在class和id属性中使用下划线，除非被转义过，而各个浏览器厂商的早期版本对此标准支持极不一致。
-
-*参考：*
 
 1. <https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names>
 
