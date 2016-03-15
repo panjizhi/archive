@@ -47,7 +47,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 - inline-block样式
 
-IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如下：
+IE6/7下对&nbsp;*inline元素*&nbsp;触发hasLayout即可获得inline-block布局，如下：
 
 >    `#selecotr {`
 
