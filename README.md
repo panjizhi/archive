@@ -47,6 +47,8 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 - inline-block(IE6/7)
 
+针对inline元素触发hasLayout即可，如下：
+
 >    `#selecotr {`
 
 >    `    display: inline-block;`
