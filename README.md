@@ -39,7 +39,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 >    `zoom: 1;`
 
-很多时候，IE6、IE7下的布局bug触发hasLayout即可解决。
+很多时候，IE6、IE7下的布局bug可以通过触发hasLayout解决。
 
 <https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
 
@@ -47,7 +47,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 - inline-block
 
-针对inline元素触发hasLayout即可，如下：
+IE6/7下对*inline元素*触发hasLayout即可获得inline-block布局，如下：
 
 >    `#selecotr {`
 
@@ -89,7 +89,8 @@ z-index只适用于定位元素（relative、absolute、fixed），z-index指定
 
 ## inline-block间距 ##
 
-显示样式为inline-block的元素之间存在的空格字符会产生额外间距。
+    显示样式为inline-block的元素之间存在的空格字符会产生额外间距。
+    `The spacing effect is because of the font's spacing setting, so you must reset it for the inlined elements and set it again for the content within.`
 
 
 
