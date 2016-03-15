@@ -99,7 +99,11 @@ display取值为inline-block的元素之间空格字符会产生水平间距。
 
 水平向并排展现的inline-block元素，最后一个元素常会出现顶部不对其的问题。通过添加`overflow: hidden;`解决。
 
-    The baseline of an 'inline-block' is the baseline of its last line box in the normal flow, unless it has either no in-flow line boxes or if its 'overflow' property has a computed value other than 'visible', in which case the baseline is the bottom margin edge.
+    The baseline of an 'inline-block' is the baseline of its last line box in the normal flow, 
+
+    unless it has either no in-flow line boxes or if its 'overflow' property has a computed value 
+
+    other than 'visible', in which case the baseline is the bottom margin edge.
 
 <http://stackoverflow.com/questions/9273016/why-is-this-inline-block-element-pushed-downward>
 
