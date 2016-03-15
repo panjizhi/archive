@@ -105,3 +105,5 @@ display取值为inline-block的元素之间空格字符会引入水平间距。
 
 <http://stackoverflow.com/questions/9273016/why-is-this-inline-block-element-pushed-downward>
 
+
+`<http://www.virtuosimedia.com/dev/css/ultimate-ie6-cheatsheet-how-to-fix-25-internet-explorer-6-bugs>`
