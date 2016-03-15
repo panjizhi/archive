@@ -41,9 +41,9 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 很多时候，IE6、IE7下的布局bug可以通过触发hasLayout解决。
 
-<https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
-
 <http://riny.net/2013/haslayout/>
+
+<https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
 
 - inline-block
 
