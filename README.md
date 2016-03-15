@@ -23,7 +23,7 @@
 
 >    `#doce { *color: blue; /* or #color: blue */ }`
 
-[http://www.paulirish.com/2009/browser-specific-css-hacks/](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
+    [http://www.paulirish.com/2009/browser-specific-css-hacks/](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
 
 3. 不支持outline(IE7同样不支持)
 
