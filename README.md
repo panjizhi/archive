@@ -38,6 +38,13 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 [https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx](https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx)
 [http://riny.net/2013/haslayout/](http://riny.net/2013/haslayout/)
 
+5. inline-block(IE6/7)
+
+>    #selecotr {
+>        display: inline-block;
+>        *display: inline;
+>        zoom: 1;
+>    }
 
 ## class命名规范 ##
 
