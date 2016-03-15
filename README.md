@@ -15,13 +15,13 @@
 
 2. 只对IE6生效（css样式名称以下划线开头）
 
->        `/* IE6 */`
+>    `/* IE6 */`
 
->        `#once { _color: blue }`
+>    `#once { _color: blue }`
 
->        `/* IE6, IE7 */`
+>    `/* IE6, IE7 */`
 
->        `#doce { *color: blue; /* or #color: blue */ }`
+>    `#doce { *color: blue; /* or #color: blue */ }`
 
 [详细参考](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
 
