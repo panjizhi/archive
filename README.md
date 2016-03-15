@@ -2,8 +2,8 @@
 - 写在最前面
 - 还记得IE6吗
 - class命名规范
-- z-index
-- flow
+- z-index属性
+- to be continue
 
 ## 写在最前面 ##
 
@@ -65,5 +65,12 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 1. [https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names)
 
 2. [http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines](http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines)
+
+## z-index属性 ##
+
+z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level，只有比较的元素处于同一个stack level，z-index比较才有意义。非定位元素的stack context为根元素节点。
+
+[http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index](http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index)
+
 
 
