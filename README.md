@@ -4,7 +4,7 @@
 - class命名规范
 - z-index属性
 - inline-block间距
-- inline-block对齐
+- inline-block垂直对齐
 
 ## 写在最前面 ##
 
