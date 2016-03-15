@@ -13,6 +13,7 @@
 
 1. 不支持*position:fixed;*
 
+
 2. 只对IE6生效（css样式名称以下划线开头）
 
 >    `/* IE6 */`
@@ -23,7 +24,8 @@
 
 >    `#doce { *color: blue; /* or #color: blue */ }`
 
-    [http://www.paulirish.com/2009/browser-specific-css-hacks/](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
+[http://www.paulirish.com/2009/browser-specific-css-hacks/](http://www.paulirish.com/2009/browser-specific-css-hacks/) 
+
 
 3. 不支持outline(IE7同样不支持)
 
@@ -32,6 +34,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 >    `outline: 0;//IE>=8`
 
 >    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
+
 
 4. 触发hasLayout(IE6/7)
 
