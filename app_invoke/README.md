@@ -37,7 +37,7 @@
 
 `1.` Safari浏览器
 
-&emsp;&emsp;不支持iframe标签调，只能使用`A标签`打开，`location.href`跳转直接加载scheme uri实现调起。
+&emsp;&emsp;不支持iframe标签调，只能使用`location.href`跳转直接加载scheme uri实现调起(也可以使用A标签跳转)。
 
 &emsp;&emsp;*问题：App未安装时出现无法规避的错误提示。*
 
@@ -50,27 +50,35 @@
 
 - iframe标签调起
 
-&emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme，从而实现App调起。
+&emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme uri，调起App。
 
-&emsp;&emsp;针对Android下多数分浏览器，可使用此方式调起。
+&emsp;&emsp;Android下多数浏览器，可使用此方式调起。
 
-- A标签、`location.href`调起
+- `location.href`加载调起
 
-&emsp;&emsp;通过A标签、`location.href`直接加载scheme uri调起。
+&emsp;&emsp;使用`location.href`直接加载scheme uri调起App。
 
 
-	无论使用iframe加载，或是使用A标签加载，Android, versions 25 and later，必须基于用户交互动作，否则无法调起。
+- 用户行为触发
 
-    总的来说，Android平台版本碎片化太严重，目前尚未整理各种调起方式适用的    场景（Android版本，浏览器厂商）。
-    使用时注意结合使用上述三种方法。
+&emsp;&emsp;无论使用iframe加载，或是使用`location.href`加载，Android, versions 25 and later，必须基于用户交互动作，否则无法调起。
+
+    总的来说，Android平台碎片化太严重，目前未整理各种调起方式的适用场景（Android版本，浏览器厂商）。
+    遇到问题参照上述三点。
 
 
 ## 调起状态检测 ##
 
-利用iframe标签加载scheme来调起App适用于版本号在25之前的Chrome浏览器，之后的Chrome浏览器不再支持iframe标签的自定义scheme调起，转而支持intent协议调起APP。
-通过S.browser_fallback_url指定App调起失败的回跳地址（browser_fallback_ur这个值Chrome浏览器自动过滤，并不会到达App）。
-利于S.browser_fallback_url值，结合window.onhashchange事件即可判断APP是否成功调起。
+- scheme uri调起
 
-注意，下述两种场景会导致App调起失败：
+&emsp;&emsp;使用scheme uri的调起方式，通过Page Visibility API判断页面状态，获得App调起状态。
 
-另：针对App调起支持，国内浏览器厂商有各自的白名单、黑名单策略。
+<https://www.w3.org/TR/page-visibility/>
+
+<https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API>
+
+- intent scheme调起
+
+&emsp;&emsp;通过`S.browser_fallback_url`字段指定App调起失败的回调地址（S.browser_fallback_ur这个值由Chrome浏览器自动过滤，并不会到达App客户端）。S.browser_fallback_url添加hash值，结合window.onhashchange事件即可判断App调起状态。
+
+
