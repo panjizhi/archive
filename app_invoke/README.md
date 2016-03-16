@@ -35,13 +35,13 @@
 
 - iOS9
 
-1. Safari浏览器
+`1.` Safari浏览器
 
 &emsp;&emsp;不支持iframe标签调，只能使用`A标签`打开，`location.href`跳转直接加载scheme uri实现调起。
 
 &emsp;&emsp;*问题：App未安装时出现无法规避的错误提示。*
 
-2. 非Safari浏览器
+`2.` 非Safari浏览器
 
 &emsp;&emsp;支持iframe标签实现调起。
 
