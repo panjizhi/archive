@@ -78,9 +78,9 @@ IE6/7下通过对 *inline元素* 触发hasLayout获得inline-block布局，如�
 
 ## class命名规范 ##
 
-*HTML代码中标签元素的id和class取值应避免包含下划线，使用连字符代替。*
+*HTML中标签元素的id和class取值应避免包含下划线，使用连字符代替。*
 
-1996年发布的CSS1规范，1998年发布的CSS2规范不允许在class和id属性中使用下划线，除非被转义过，而各个浏览器厂商的早期版本对此标准支持极不一致。
+1996年发布的CSS1标准，1998年发布的CSS2标准不允许class和id属性值中使用下划线，除非被转义过，各个浏览器厂商的早期版本对此标准支持极不一致。
 
 1. <https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names>
 
@@ -89,14 +89,17 @@ IE6/7下通过对 *inline元素* 触发hasLayout获得inline-block布局，如�
 
 ## z-index属性 ##
 
-z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level。元素的展现层次首先看stacking context的z-index值，处于同一个stacking context下的元素才比较各种的z-index值。
+z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level。元素的展现层次首先比较stacking context的z-index值，处于同一个stacking context下的元素才比较各自的z-index值。
 
 <http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
 
 
 ## inline-block间距 ##
 
-display取值为inline-block的元素之间空格字符会引入水平间距。
+inline-block的区块之间存在的空格文本会引入水平间距，两种解决方案：
+
+1. 清除区块中的空格文本；
+2. 设置父容器的`font-size: 0;`，子区块中恢复；
 
     The spacing effect is because of the font's spacing setting, 
     so you must reset it for the inlined elements and set it again for the content within.
