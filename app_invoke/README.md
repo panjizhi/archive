@@ -15,11 +15,14 @@
 
 + *scheme uri*： iOS, Android两个平台同时支持；
 
-+ *intent scheme*：适用于Android下的Chrome浏览器；[link](https://developer.chrome.com/multidevice/android/intents)
++ *intent scheme*：适用于Android下的Chrome浏览器；[reference](https://developer.chrome.com/multidevice/android/intents)
 
-+ *universal links*：iOS9新增特性，用于适用于iOS9系统；[link](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12)
++ *universal links*：iOS9新增特性，用于适用于iOS9系统；[reference](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12)
 
 本文主要讨 *scheme uri* 这一调起方式。
+
+    另：国内浏览器厂商众多，且分别实现各自的调起白名单、黑名单策略，
+    针对具体的App调起做了处理。
 
 
 
