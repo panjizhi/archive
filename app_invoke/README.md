@@ -11,7 +11,7 @@
 
 - `universal links`
 
-无论采用哪种方式，都需求客户端App实现对应的调起接口。
+无论采用哪种方式，都需要客户端App配合实现对应的调起规范。
 
 + *scheme uri*： iOS, Android两个平台同时支持；
 
@@ -29,18 +29,21 @@
 
 - iOS9之前
 
-&emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme，从而实现App调起。
+&emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme uri，调起App。
 
-&emsp;&emsp;*通过隐藏iframe标签实现调起，优点在于可以有效规避App未安装情况下出现的错误提示信息。*
+&emsp;&emsp;*通过隐藏的iframe标签实现调起，优点在于可以规避App未安装情况下出现的错误提示信息。*
 
 - iOS9
 
-&emsp;&emsp;Safari浏览器无法使用iframe标签调起App，转而只能使用`A标签`，`location.href`加载scheme uri实现调起。
+1. Safari浏览器
+
+&emsp;&emsp;不支持iframe标签调，只能使用`A标签`打开，`location.href`跳转直接加载scheme uri实现调起。
 
 &emsp;&emsp;*问题：App未安装时出现无法规避的错误提示。*
 
-&emsp;&emsp;非Safari浏览器依然可以使用iframe标签实现调起。
+2. 非Safari浏览器
 
+&emsp;&emsp;支持iframe标签实现调起。
 
 
 ## Android平台 ##
