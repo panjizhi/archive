@@ -43,15 +43,26 @@
 
 
 
-另，iOS9之后新增universal links机制，遵循规范开发App可实现平滑调起。
-https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12
+## Android平台 ##
 
-iOS8、iOS9下的Safari浏览器支持Page Visibility特性，通过监听document.visibilitychange事件，可以判断App是否成功调起。
-http://www.w3.org/TR/page-visibility/
+- iframe标签调起
 
-注意：iOS下的其他浏览器虽然支持Page Visibility接口，然而网页中调起App并不触发document.visibilitychange事件。
+&emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme，从而实现App调起。
 
-二、Android平台
+&emsp;&emsp;针对Android下多数分浏览器，可使用此方式调起。
+
+- A标签、`location.href`调起
+
+&emsp;&emsp;通过A标签、`location.href`直接加载scheme uri调起。
+
+
+	无论使用iframe加载，或是使用A标签加载，Android, versions 25 and later，必须基于用户交互动作，否则无法调起。
+
+    总的来说，Android平台版本碎片化太严重，目前尚未整理各种调起方式适用的
+    场景（Android版本，浏览器厂商）。使用时注意结合使用上述三种方法。
+
+
+## 调起状态检测 ##
 
 利用iframe标签加载scheme来调起App适用于版本号在25之前的Chrome浏览器，之后的Chrome浏览器不再支持iframe标签的自定义scheme调起，转而支持intent协议调起APP。
 通过S.browser_fallback_url指定App调起失败的回跳地址（browser_fallback_ur这个值Chrome浏览器自动过滤，并不会到达App）。
