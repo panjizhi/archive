@@ -1,6 +1,6 @@
 ### JS Encode ###
 
-前端混淆时候使用，将js脚步转换为6个字符的组合`![]+()`，多见于前端攻击、蓄意作弊等行为。
+可用于对前端js脚本做混淆（js脚本转换为6个字符的组合`![]+()`），多见于前端攻击、蓄意作弊等行为。
 
 ## 基本转换：##
 
@@ -30,12 +30,12 @@
 
 - Function    =>  []["filter"]
 
-- eval        =>  []["filter"]["constructor"]( CODE )()
+- eval        =>  []["filter"]\["constructor"\]( CODE )()
 
-- window      =>  []["filter"]["constructor"]("return this")()
+- window      =>  []["filter"]\["constructor"\]("return this")()
 
 
-*原始参考*
+*原文参考*
 
 <http://www.jsfuck.com/>
 
