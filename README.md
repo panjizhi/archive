@@ -10,7 +10,6 @@
 
 *确保「HTML结构合乎自然观感」总是值得的。*
 
-<http://www.virtuosimedia.com/dev/css/ultimate-ie6-cheatsheet-how-to-fix-25-internet-explorer-6-bugs>
 
 ## 古老的IE6、IE7 ##
 
@@ -72,6 +71,9 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 
     IE6、IE7中，父元素设置`display: none;`，若子元素尺寸超过父元素，且设置了相对定位`position: relative;`，父元素必须设置`position: relative;`，否则子元素尺寸将溢出。
 
+<http://www.virtuosimedia.com/dev/css/ultimate-ie6-cheatsheet-how-to-fix-25-internet-explorer-6-bugs>
+
+
 ## class命名规范 ##
 
 *HTML代码中标签元素的id和class取值应避免包含下划线，使用连字符代替。*
@@ -82,11 +84,13 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 
 2. <http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines>
 
+
 ## z-index属性 ##
 
 z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level。元素的展现层次首先看stacking context的z-index值，处于同一个stacking context下的元素才比较各种的z-index值。
 
 <http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
+
 
 ## inline-block间距 ##
 
@@ -94,6 +98,7 @@ display取值为inline-block的元素之间空格字符会引入水平间距。
 
     The spacing effect is because of the font's spacing setting, 
     so you must reset it for the inlined elements and set it again for the content within.
+
 
 ## inline-block垂直对齐 ##
 
