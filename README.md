@@ -29,7 +29,7 @@
 
 - 不支持outline
 
-IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
+IE6/7下的link元素通过 *hidefocus="true"* 属性清除outline，如下：
 
 >    `outline: 0;//IE>=8`
 
@@ -48,7 +48,7 @@ IE6/7下清除元素outline使用*hidefocus="true"*属性，如下：
 
 - inline-block样式
 
-IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如下：
+IE6/7下通过对 *inline元素* 触发hasLayout获得inline-block布局，如下：
 
 >    `#selecotr {`
 
@@ -61,7 +61,7 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 >    `}`
 
 
-- IE6下block元素嵌套
+- IE6下的block元素嵌套
 
     两个div嵌套的情况下，如果被包含的子div宽度超过父div宽度，则父div宽度自动延伸，直到能包含子div。
 
@@ -69,7 +69,9 @@ IE6/7下对 *inline元素* 触发hasLayout即可获得inline-block布局，如�
 
 - `overflow: hidden;`的问题
 
-    IE6、IE7中，父元素设置`display: none;`，若子元素尺寸超过父元素，且设置了相对定位`position: relative;`，父元素必须设置`position: relative;`，否则子元素尺寸将溢出。
+    IE6、IE7中，父元素设置`overflow: hidden;`，若子元素尺寸超过父元素，且设置了相对定位`position: relative;`，父元素必须设置`position: relative;`，否则子元素尺寸将溢出。
+
+*参考链接*
 
 <http://www.virtuosimedia.com/dev/css/ultimate-ie6-cheatsheet-how-to-fix-25-internet-explorer-6-bugs>
 
