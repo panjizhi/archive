@@ -54,7 +54,7 @@
 
 &emsp;&emsp;Android下多数浏览器，可使用此方式调起。
 
-- `location.href`加载调起
+- *location.href* 加载调起
 
 &emsp;&emsp;使用`location.href`直接加载scheme uri完成调起。
 
@@ -64,6 +64,7 @@
 &emsp;&emsp;无论是使用iframe加载，或是使用`location.href`加载，Android, versions 25 and later，必须基于用户交互动作，否则无法调起。
 
     总的来说，Android平台碎片化太严重，目前未整理各种调起方式的适用场景（Android版本，浏览器厂商）。
+    
     遇到问题参照上述三点。优先采用隐藏ifram标签实现调起，App未安装时可以规避错误提示。
 
 
