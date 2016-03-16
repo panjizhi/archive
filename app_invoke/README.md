@@ -11,7 +11,7 @@
 
 - `universal links`
 
-无论采用哪种方式，都需要App客户端配合实现相应的调起规范。
+&emsp;&emsp;无论采用哪种方式，都需要App客户端配合实现相应的调起规范。
 
 + *scheme uri*： iOS, Android两个平台同时支持；
 
@@ -19,7 +19,7 @@
 
 + *universal links*：iOS9新增特性，用于适用于iOS9系统；[reference](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12)
 
-本文主要讨 *scheme uri* 这一调起方式。
+&emsp;&emsp;本文主要讨 *scheme uri* 这一调起方式。
 
     另：国内浏览器厂商众多，且分别实现各自的调起白名单、黑名单过滤策略。
 
@@ -73,9 +73,9 @@
 
 &emsp;&emsp;使用scheme uri的调起方式，通过Page Visibility API判断页面可视状态的变化，获得App调起状态。
 
-<https://www.w3.org/TR/page-visibility/>
+&emsp;&emsp;<https://www.w3.org/TR/page-visibility/>
 
-<https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API>
+&emsp;&emsp;<https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API>
 
 - intent scheme调起
 
