@@ -11,7 +11,15 @@
 
 - `universal links`
 
-无论采用哪种方式，都需求客户端App实现对应的调起接口。这里主要讨 *scheme uri* 这一调起方式。
+无论采用哪种方式，都需求客户端App实现对应的调起接口。
+
++ *scheme uri*： iOS, Android两个平台同时支持；
+
++ *intent scheme*：适用于Android下的Chrome浏览器；
+
++ *universal links*：iOS9新增特性，用于适用于iOS9系统；
+
+本文主要讨 *scheme uri* 这一调起方式。
 
 
 
