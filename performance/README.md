@@ -51,6 +51,8 @@ http协议使用tcp来实现可靠的数据传输，在http/1.0中，一次http�
     1. http头部字段冗余重复
     2. http/1.1中的pipelining存在对头阻塞
 
+另，rfc2616种规定使用persistent connection时，客户端（用户浏览器）对单个域名的并发连接数不超过2个，现实中不同浏览器实现各不相同。
+
 <http://www.kancloud.cn/digest/web-performance-http2/74816> <br />
 <http://stackoverflow.com/questions/246859/http-1-0-vs-1-1> <br />
 <http://stackoverflow.com/questions/10480122/difference-between-http-pipeling-and-http-multiplexing-with-spdy> <br />
