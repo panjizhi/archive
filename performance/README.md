@@ -5,6 +5,7 @@
 - http/1.1
 - http/2
 - 浏览器渲染模型
+- 总结
 
 
 ## 写在最前面 ##
@@ -93,6 +94,13 @@ http/2是对http/1.1的升级，基本语法保持不变，主要解决http/1.1�
 
 JavaScript解析执行将阻塞页面渲染，这是因为JavaScript执行可能改变DOM结构、CSS样式，如并行渲染页面，将导致不一致。
 
+
 <https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en>
 
 <http://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/>
+
+
+## 总结 ##
+
+Web优化策略都是基于上述原理与自有业务特点。
+
