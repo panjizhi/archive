@@ -52,11 +52,8 @@ http协议使用tcp来实现可靠的数据传输，在http/1.0中，一次http�
     2. http/1.1中的pipelining存在对头阻塞
 
 <http://www.kancloud.cn/digest/web-performance-http2/74816>
-
 <http://stackoverflow.com/questions/246859/http-1-0-vs-1-1>
-
 <http://stackoverflow.com/questions/10480122/difference-between-http-pipeling-and-http-multiplexing-with-spdy>
-
 <http://stackoverflow.com/questions/10362171/is-spdy-any-different-than-http-multiplexing-over-keep-alive-connections?lq=1>
 
 
