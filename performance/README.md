@@ -91,6 +91,6 @@ http/2是对http/1.1的升级，基本语法保持不变，主要解决http/1.1�
 
 ![render tree](./render-tree-construction.png)
 
-
-
 <https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en>
+
+<http://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/>
