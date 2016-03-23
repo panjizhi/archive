@@ -41,9 +41,17 @@
 ## http/1.1 ##
 
 &emsp;&emsp;首先，相较于http/1.0，http/1.1支持tcp持久连接，默认情况下，同域下的多个http请求共用同一个tcp连接。<br />
-&emsp;&emsp;其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。
+&emsp;&emsp;其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。<br />
+&emsp;&emsp;当然，http/1.1修复了http/1.0中Host头部字段缺失的问题，完善了缓存机制等。
 
 ![http pipelining](./HTTP_pipelining2.png)
+
+&emsp;&emsp;较之于http/2，http/1.1存在如下问题：
+
+    1. http头部字段冗余重复
+    2. http/1.1中的pipelining存在对头阻塞
+
+&emsp;&emsp;<http://www.kancloud.cn/digest/web-performance-http2/74816>
 
 
 >    `/* IE6 */`
