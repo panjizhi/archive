@@ -23,7 +23,7 @@
 <https://developer.mozilla.org/zh-CN/docs/Controlling_DNS_prefetching>
 
 
-- http/1.0
+## http/1.0 ##
 
 &emsp;&emsp;http协议是Web应用的基础，http协议目前有三个版本：http/1.0、http/1.1、http/2。首先需要理解各个版本的特点，先从http/1.0开始。
 
@@ -38,7 +38,7 @@
 &emsp;&emsp;<https://www.w3.org/Protocols/HTTP/1.0/HTTPPerformance.html>
 
 
-- http/1.1
+## http/1.1 ##
 
 &emsp;&emsp;首先，相较于http/1.0，http/1.1支持tcp持久连接，默认情况下，同域下的多个http请求共用同一个tcp连接。<br />
 &emsp;&emsp;其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。
