@@ -77,4 +77,20 @@ http/2是对http/1.1的升级，基本语法保持不变，主要解决http/1.1�
 整体来讲，http/2较之于http/1.1，性能上实现大幅提升。升级http/2时，针对http/1.1的优化策略需调整（如：域名拆分）。
 
 
+## 浏览器渲染模型 ##
 
+![webkit render flow](./webkitflow.png)
+
+1. 渲染引擎生成DOM树、CSS树
+
+2. 合并DOM树、CSS树，生成render树（必须是展现节点）
+
+3. 布局计算每个对象的精确位置及尺寸
+
+4. 绘制，输入确定的渲染树，在屏幕上渲染像素
+
+![render tree](./render-tree-construction.png)
+
+
+
+<https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en>
