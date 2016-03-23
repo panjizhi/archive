@@ -25,133 +25,36 @@
 
 ## http/1.0 ##
 
-&emsp;&emsp;http协议是Web应用的基础，http协议目前有三个版本：http/1.0、http/1.1、http/2。首先需要理解各个版本的特点，先从http/1.0开始。
+http协议是Web应用的基础，http协议目前有三个版本：http/1.0、http/1.1、http/2。首先需要理解各个版本的特点，先从http/1.0开始。
 
-&emsp;&emsp;http协议使用tcp来实现可靠的数据传输，在http/1.0中，一次http请求对应一个tcp连接，用户通过浏览器发送http request，Web服务器返回http response数据，数据传输完成之后即断开tcp连接。这里引入两个问题：
+http协议使用tcp来实现可靠的数据传输，在http/1.0中，一次http请求对应一个tcp连接，用户通过浏览器发送http request，Web服务器返回http response数据，数据传输完成之后即断开tcp连接。这里引入两个问题：
 
     1. tcp连接不可复用，导致重复建立连接的开销
     2. Web服务器主动关闭tcp连接，维护大量TIME_WAIT状态
 
-&emsp;&emsp;另，http/1.0规范中，request头部字段缺乏Host字段的定义，无法识别一台主机中的不同域名。
+另，http/1.0规范中，request头部字段缺乏Host字段的定义，无法识别一台主机中的不同域名。
 
 
-&emsp;&emsp;<https://www.w3.org/Protocols/HTTP/1.0/HTTPPerformance.html>
+<https://www.w3.org/Protocols/HTTP/1.0/HTTPPerformance.html>
 
 
 ## http/1.1 ##
 
-&emsp;&emsp;首先，相较于http/1.0，http/1.1支持tcp持久连接，默认情况下，同域下的多个http请求共用同一个tcp连接。<br />
-&emsp;&emsp;其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。<br />
-&emsp;&emsp;当然，http/1.1修复了http/1.0中Host头部字段缺失的问题，完善了缓存机制等。
+首先，相较于http/1.0，http/1.1支持tcp持久连接，默认情况下，同域下的多个http请求共用同一个tcp连接。<br />
+其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。<br />
+当然，http/1.1修复了http/1.0中Host头部字段缺失的问题，完善了缓存机制等。
 
 ![http pipelining](./HTTP_pipelining2.png)
 
-&emsp;&emsp;较之于http/2，http/1.1存在如下问题：
+较之于http/2，http/1.1存在如下问题：
 
     1. http头部字段冗余重复
     2. http/1.1中的pipelining存在对头阻塞
 
-&emsp;&emsp;<http://www.kancloud.cn/digest/web-performance-http2/74816>
+<http://www.kancloud.cn/digest/web-performance-http2/74816>
 
 
->    `/* IE6 */`
+## http/2 ##
 
->    `#once { _color: blue }`
-
->    `/* IE6, IE7 */`
-
->    `#doce { *color: blue; /* or #color: blue */ }`
-
-<http://www.paulirish.com/2009/browser-specific-css-hacks/> 
-
-- 不支持outline
-
-IE6/7下的link元素通过 *hidefocus="true"* 属性清除outline，如下：
-
->    `outline: 0;//IE>=8`
-
->    `<a href="http://xxx" hidefocus="true">text</a><!--IE6/7-->`
-
-
-- 触发hasLayout
-
->    `zoom: 1;`
-
-很多时候，IE6、IE7下的布局bug可以通过触发hasLayout解决。
-
-<http://riny.net/2013/haslayout/>
-
-<https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
-
-- inline-block样式
-
-IE6/7下通过对 *inline元素* 触发hasLayout获得inline-block布局，如下：
-
->    `#selecotr {`
-
->    `    display: inline-block;`
-
->    `    *display: inline;`
-
->    `    zoom: 1;`
-
->    `}`
-
-
-- IE6下的block元素嵌套
-
-    两个div嵌套的情况下，如果被包含的子div宽度超过父div宽度，则父div宽度自动延伸，直到能包含子div。
-
-    通过设置子div的`position: absolute;`解决，fixed或者float都不能解决此问题。
-
-- `overflow: hidden;`的问题
-
-    IE6、IE7中，父元素设置`overflow: hidden;`，若子元素尺寸超过父元素，且设置了相对定位`position: relative;`，父元素必须设置`position: relative;`，否则子元素尺寸将溢出。
-
-*参考链接*
-
-<http://www.virtuosimedia.com/dev/css/ultimate-ie6-cheatsheet-how-to-fix-25-internet-explorer-6-bugs>
-
-
-## class命名规范 ##
-
-*HTML中标签元素的id和class取值应避免包含下划线，使用连字符代替。*
-
-1996年发布的CSS1标准，1998年发布的CSS2标准不允许class和id属性值中使用下划线，除非被转义过，各个浏览器厂商的早期版本对此标准支持极不一致。
-
-1. <https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Underscores_in_class_and_ID_Names>
-
-2. <http://stackoverflow.com/questions/1696864/naming-class-and-id-html-attributes-dashes-vs-underlines>
-
-
-## z-index属性 ##
-
-z-index只适用于定位元素（relative、absolute、fixed），z-index指定元素的stack level。元素的展现层次首先比较stacking context的z-index值，处于同一个stacking context下的元素才比较各自的z-index值。
-
-<http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#z-index>
-
-
-## inline-block间距 ##
-
-inline-block的区块之间存在的空格文本会引入水平间距，两种解决方案：
-
-1. 清除区块中的空格文本；
-2. 设置父容器的`font-size: 0;`，子区块中恢复；
-
-    The spacing effect is because of the font's spacing setting, 
-    so you must reset it for the inlined elements and set it again for the content within.
-
-
-## inline-block垂直对齐 ##
-
-水平方向并排展现的inline-block元素，最后一个元素常会出现顶部不能对齐的问题。
-
-通过添加`overflow: hidden;`解决。
-
-    The baseline of an 'inline-block' is the baseline of its last line box in the normal flow, 
-    unless it has either no in-flow line boxes or if its 'overflow' property has a computed value 
-    other than 'visible', in which case the baseline is the bottom margin edge.
-
-<http://stackoverflow.com/questions/9273016/why-is-this-inline-block-element-pushed-downward>
 
 
