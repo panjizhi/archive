@@ -25,14 +25,14 @@
 
 - http/1.0
 
-http协议是Web应用的基础，http协议目前有三个版本：http/1.0、http/1.1、http/2。首先需要理解各个版本的特点，先从http/1.0开始。
+&emsp;&emsp;http协议是Web应用的基础，http协议目前有三个版本：http/1.0、http/1.1、http/2。首先需要理解各个版本的特点，先从http/1.0开始。
 
-http协议使用tcp来实现可靠的数据传输，在http/1.0中，一次http请求对应一个tcp连接，用户通过浏览器发送http request，Web服务器返回http response数据，数据传输完成之后即断开tcp连接。这里引入两个问题：
+&emsp;&emsp;http协议使用tcp来实现可靠的数据传输，在http/1.0中，一次http请求对应一个tcp连接，用户通过浏览器发送http request，Web服务器返回http response数据，数据传输完成之后即断开tcp连接。这里引入两个问题：
 
-- tcp连接不可复用，导致重复建立连接的开销
-- Web服务器主动关闭tcp连接，维护大量TIME_WAIT状态
++     tcp连接不可复用，导致重复建立连接的开销
++     Web服务器主动关闭tcp连接，维护大量TIME_WAIT状态
 
-另，http/1.0规范中，request头部字段缺乏Host字段的定义，无法识别一台主机中的不同域名。
+&emsp;&emsp;另，http/1.0规范中，request头部字段缺乏Host字段的定义，无法识别一台主机中的不同域名。
 
 
 <https://www.w3.org/Protocols/HTTP/1.0/HTTPPerformance.html>
