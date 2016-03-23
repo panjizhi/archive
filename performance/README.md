@@ -37,6 +37,14 @@
 
 &emsp;&emsp;<https://www.w3.org/Protocols/HTTP/1.0/HTTPPerformance.html>
 
+
+- http/1.1
+
+&emsp;&emsp;首先，相较于http/1.0，http/1.1支持tcp持久连接，默认情况下，同域下的多个http请求共用同一个tcp连接。
+
+&emsp;&emsp;其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，Web服务器端返回response必须是按照request的发送顺序依次返回。
+
+
 >    `/* IE6 */`
 
 >    `#once { _color: blue }`
