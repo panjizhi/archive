@@ -24,16 +24,15 @@
     另：国内浏览器厂商众多，且分别实现各自的调起白名单、黑名单过滤策略。
 
 
-
 ## iOS平台 ##
 
-- iOS9之前
+### iOS9之前 ###
 
 &emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme uri完成调起。
 
 &emsp;&emsp;*通过隐藏的iframe标签实现调起，优点在于可以规避App未安装情况下出现的错误提示信息。*
 
-- iOS9
+### iOS9 ###
 
 `1.` Safari浏览器
 
