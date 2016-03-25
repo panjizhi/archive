@@ -1,9 +1,9 @@
-# 前端实现App调起 #
+# JS打开移动App #
 
 
 # 写在最前面 #
 
-目前前端实现App调起有三种方式：
+当前，浏览器中执行JS打开移动App有三种实现方式：
 
 - `scheme uri`
 
@@ -11,7 +11,7 @@
 
 - `universal links`
 
-&emsp;&emsp;无论采用哪种方式，都需要App客户端配合实现相应的调起规范。
+无论采用哪种方式，都需要App客户端配合实现相应的调起规范。
 
 + *scheme uri*： iOS, Android两个平台同时支持；
 
@@ -19,7 +19,7 @@
 
 + *universal links*：iOS9新增特性，用于适用于iOS9系统；[reference](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12)
 
-&emsp;&emsp;本文主要讨 *scheme uri* 这一调起方式。
+本文主要讨 *scheme uri* 这一调起方式。
 
     另：国内浏览器厂商众多，且分别实现各自的调起白名单、黑名单过滤策略。
 
