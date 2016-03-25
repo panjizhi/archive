@@ -102,5 +102,9 @@ JavaScript解析执行将阻塞页面渲染，这是因为JavaScript执行可能
 
 ## 总结 ##
 
-Web优化策略都是基于上述原理与自有业务特点。
+Web优化策略基本上都是围绕上述原理展开，项目中设计具体优化策略时一定要结合自身的业务特点。
+
+<https://developer.yahoo.com/performance/rules.html>
+
+<https://gist.github.com/wayspurrchen/b6fd4eb085edf54406b7>
 
