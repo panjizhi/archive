@@ -35,9 +35,9 @@
 - window      =>  []["filter"]\["constructor"\]("return this")()
 
 
-<b>原文参考</b>
+#### 原文参考 ####
 
 <http://www.jsfuck.com/>
 
-[一个神奇的域名:xip.io](http://xip.io/)
+彩蛋：一个神奇的域名:xip.io<http://xip.io/>
 
