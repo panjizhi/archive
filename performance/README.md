@@ -86,15 +86,17 @@ http/2是对http/1.1的升级，基本语法保持不变，主要解决http/1.1�
 
 1. 渲染引擎生成DOM树、CSS树
 
-2. 合并DOM树、CSS树，生成render树（必须是展现节点）
+2. 将DOM树、CSS树合并，生成render树（必须是展现节点）
 
-3. 布局计算每个对象的精确位置及尺寸
+3. 布局，计算每个对象的精确位置及尺寸
 
-4. 绘制，输入确定的渲染树，在屏幕上渲染像素
+4. 绘制，在屏幕上渲染像素
+
+注：render树中的节点必须是展现节点，&lt;meta&gt;、&lt;script&gt;、样式为 `display: none;`这样的节点是不会出现在render树上的。如下：
 
 ![render tree](./render-tree-construction.png)
 
-JavaScript解析执行将阻塞页面渲染，这是因为JavaScript执行可能改变DOM结构、CSS样式，如并行渲染页面，将导致不一致。
+另，JavaScript脚本的解析执行会阻塞页面渲染，这是因为JavaScript执行可能改变DOM结构、CSS样式，如并行渲染页面，无法保证一致性。
 
 
 <https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en>
