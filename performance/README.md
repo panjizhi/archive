@@ -42,7 +42,7 @@ http属于应用层协议，底层使用tcp协议实现可靠的数据传输。�
 ## http/1.1 ##
 
 首先，相较于http/1.0，http/1.1支持tcp持久连接，默认情况下，同域下的多个http请求共用同一个tcp连接。<br />
-其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，而在发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。<br />
+其次，http/1.1支持pipelining，将多个request顺序提交到Web服务器，发送过程中不需要先等待服务端的回应，但要求Web服务器端返回response的顺序必须与request的发送顺序一致，这里可能产生对头阻塞（Head-of-line blocking）。<br />
 当然，http/1.1修复了http/1.0中Host头部字段缺失的问题，完善了缓存机制等。
 
 ![http pipelining](./HTTP_pipelining2.png)
