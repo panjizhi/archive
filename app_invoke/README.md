@@ -28,21 +28,21 @@
 
 ### iOS9之前 ###
 
-&emsp;&emsp;创建隐藏的iframe标签，通过iframe加载App对应的scheme uri完成调起。
+创建隐藏的iframe标签，通过iframe加载App对应的scheme uri完成调起。
 
-&emsp;&emsp;*通过隐藏的iframe标签实现调起，优点在于可以规避App未安装情况下出现的错误提示信息。*
+*通过隐藏的iframe标签实现调起，优点在于可以规避App未安装情况下出现的错误提示信息。*
 
 ### iOS9 ###
 
-`1.` Safari浏览器
+1. Safari浏览器
 
-&emsp;&emsp;不支持iframe标签调，只能使用`location.href`直接加载scheme uri完成调起(也可以使用A标签跳转)。
+不支持iframe标签调，只能使用`location.href`直接加载scheme uri完成调起(也可以使用A标签跳转)。
 
-&emsp;&emsp;*问题：App未安装时出现无法规避的错误提示。*
+*问题：App未安装时出现无法规避的错误提示。*
 
-`2.` 非Safari浏览器
+2. 非Safari浏览器
 
-&emsp;&emsp;支持iframe标签实现调起。
+支持iframe标签实现调起。
 
 
 ## Android平台 ##
