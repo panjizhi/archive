@@ -36,13 +36,13 @@
 
 1. Safari浏览器
 
-不支持iframe标签调，只能使用`location.href`直接加载scheme uri完成调起(也可以使用A标签跳转)。
+&emsp;&emsp;不支持iframe标签调，只能使用`location.href`直接加载scheme uri完成调起(也可以使用A标签跳转)。
 
-*问题：App未安装时出现无法规避的错误提示。*
+&emsp;&emsp;*问题：App未安装时出现无法规避的错误提示。*
 
 2. 非Safari浏览器
 
-支持iframe标签实现调起。
+&emsp;&emsp;支持iframe标签实现调起。
 
 
 ## Android平台 ##
