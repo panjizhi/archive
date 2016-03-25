@@ -1,6 +1,6 @@
 # Web性能优化 #
 - 写在最前面
-- dns解析
+- dns预取
 - http/1.0
 - http/1.1
 - http/2
@@ -10,16 +10,16 @@
 
 ## 写在最前面 ##
 
-理解Web各个环节的实现原理，才能有效实施性能优化策略。
+理解Web交互中各环节的实现机理，是有效实施性能优化策略的基础。
 
 
-## dns解析 ##
+## dns预取 ##
 
-应用层http协议使用域名标识Web服务，而网络传输过程中实际上是使用ip地址来标识通信的两端，因此，访问Web服务的第一步是做dns解析，将Web服务器的域名解析成对应的ip地址。如下（windows平台）：
+http协议使用域名标识Web服务，网络传输过程中实际上是基于ip和端口来连接通信的两端，因此，访问Web服务的第一步是dns解析，将Web服务器的域名解析成对应的ip地址。如下（windows平台）：
 
 ![dns resolution](./dns-resolution.gif)
 
-*如能提前执行dns解析，用户请求Web资源时就能够节省dns解析的时间延迟，这就是dns预取策略。*
+*提前执行dns解析，用户请求Web资源时就能够省掉dns解析的时间延迟。*
 
 <https://developer.mozilla.org/zh-CN/docs/Controlling_DNS_prefetching>
 
