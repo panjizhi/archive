@@ -96,8 +96,7 @@ http/2是对http/1.1的升级，基本语法保持不变，主要解决http/1.1�
 
 ![render tree](./render-tree-construction.png)
 
-另，JavaScript脚本的解析执行会阻塞页面渲染，这是因为JavaScript执行可能改变DOM结构、CSS样式，如并行渲染页面，无法保证一致性。
-
+另，浏览器中的JavaScript引擎单线程解析执行JS代码，JS的解析执行会阻塞页面渲染。JS执行可能改变DOM结构、CSS样式，如并行渲染页面，无法保证一致性。
 
 <https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en>
 
@@ -106,7 +105,7 @@ http/2是对http/1.1的升级，基本语法保持不变，主要解决http/1.1�
 
 ## 总结 ##
 
-Web优化策略基本上都是围绕上述原理展开，项目中设计具体优化策略时一定要结合自身的业务特点。
+Web优化策略基本上都是围绕上述原理展开，项目中设计具体优化策略时，还需要结合自身的业务特点。
 
 <https://developer.yahoo.com/performance/rules.html>
 
