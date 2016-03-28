@@ -35,9 +35,9 @@ try {
                             // Browsers: IE11
                             Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
 
-        function hijacking(newValue) {
+        function hijacking(msg) {
             // hijacking code here
-            console.log('cookie hijacking');
+            console.log(msg);
         }
 
         function nativeGetter() {
@@ -52,10 +52,11 @@ try {
             _iframeDocument = _iframe.contentDocument || _iframe.contentWindow.document;
             Object.defineProperty(document, 'cookie', { // accessor descriptor
                 get : function () {
+                    hijacking('cookie reading.');
                     return nativeGetter();
                 },
                 set : function (newValue) {
-                    hijacking(newValue);
+                    hijacking('cookie writing: ' + newValue);
                     return nativeSetter(newValue);
                 },
                 enumerable : false, 
@@ -83,10 +84,11 @@ try {
                 _setter = _descriptor.set || function () {};
                 Object.defineProperty(document, 'cookie', {
                     get : function () {
+                        hijacking('cookie reading.');
                         return _getter.call(document);
                     },
                     set : function (newValue) {
-                        hijacking(newValue);
+                        hijacking('cookie writing: ' + newValue);
                         return _setter.call(document, newValue);
                     },
                     enumerable : true,
