@@ -1,11 +1,12 @@
 /**
- *  @file cookie_hijacking.js
+ *  @file cookie_hijack.js
  *  @author panjizhi
  *  @date 2015/04/10
  *  
- *  重写document.cookie的data/accessor descriptor, 监测前端js对浏览器cookie的读/写操作
+ *  通过重写document.cookie的data/accessor descriptor, 
+ *  监控前端js脚本对浏览器cookie内容的读写操作.
  *
- *  环境:
+ *  测试环境:
  *  OS：windows 7 64bit
  *  Browsers：IE8/9/10/11, Firefox 36.0.4, chrome 41.0.2272.118 m
  *
