@@ -9,10 +9,10 @@
 <table width="100%">
     <tr>
         <th width="20%">&nbsp;</th>
-        <th>
+        <th width="40%">
             <p>RequireJS</p>
         </th>
-        <th>
+        <th width="40%">
             <p>SeaJS</p>
         </th>
     <tr>
