@@ -8,7 +8,7 @@
 
 <table width="100%">
     <tr>
-        <th>&nbsp;</th>
+        <th width="20%">&nbsp;</th>
         <th>
             <p>RequireJS</p>
         </th>
