@@ -40,9 +40,10 @@
     </tr>
 </table>
 
+
 ## 几点补充
 
-+ 关于 CMD 强调 as lazy as possible，仅仅是推迟了依赖模块 factory 函数的执行，依赖模块的加载还是得前置，本质上并没有带来任何效率上的优化。
++ 关于 CMD 强调 `as lazy as possible`，仅仅是推迟了依赖模块 factory 函数的执行时机，依赖模块的仍然需要提前加载，本质上并没有带来任何效率上的优化。
 + AMD 规范同样支持解析 factory.toString() 获得依赖模块，此时调用 define 函数是不能提供依赖模块参数。如下：
 
 ```js
