@@ -6,23 +6,36 @@
 
 ## 异同对比
 
-```
-         | RequireJS                         | SeaJS
-------------------------------------------------------------------------------------
-书写风格  | 近似于异步回调风格                  | 近似于 CommonJS 风格
-------------------------------------------------------------------------------------
-依赖加载  | factory 执行前各依赖模块必须全部加载 | 同 RequireJS
-------------------------------------------------------------------------------------
-依赖执行  | factory 执行前执行各个依赖,         | factory 执行过程中，用到才执行各个依赖
-         | 并作为参数按序传递给 factory 函数。  |
-------------------------------------------------------------------------------------
-不足之处  | 各依赖模块先于 factory 执行前执行，  | 依赖模块通过解析 factory.toString() 获得，
-         | 如果部分模块只有在特定条件下才使用,   | 这就要求 factory 中的 require 模块名必须
-         | 就会造成了不必要的模块执行消耗。      | 硬编码，同时代码压缩必须保证 factory 中的
-         |                                   | require 参数名保持不变。
-```
+<table width="100%">
+    <tr>
+        <th>&nbsp;</th>
+        <th>
+            <p>RequireJS</p>
+        </th>
+        <th>
+            <p>SeaJS</p>
+        </th>
+    <tr>
+    <tr>
+        <th align="left">书写风格</th>
+        <td align="left"><p>近似于异步回调风格</p></td>
+        <td align="left"><p>近似于 CommonJS 风格</p></td>
+    </tr>
+    <tr>
+        <th align="left">依赖加载</th>
+        <td align="left"><p>factory 执行前各依赖模块必须全部加载</p></td>
+        <td align="left"><p>同 RequireJS</p></td>
+    </tr>
+    <tr>
+        <th align="left">依赖执行</th>
+        <td align="left"><p>factory 执行前，执行各个依赖模块 factory 函数获取导出值，并作为参数按序传递给 factory 函数。</p></td>
+        <td align="left"><p>factory 执行过程中，真正使用依赖模块时才执行模块对应的 factory 获取导出值。</p></td>
+    </tr>
+    <tr>
+        <th align="left">不足之处</th>
+        <td align="left"><p>各依赖模块先于 factory 执行前执行，如果部分依赖模块只有在特定条件下才使用，就会造成不必要的执行消耗。 </p></td>
+        <td align="left"><p>依赖模块通过解析 factory.toString() 获得，这就要求 factory 中的 require 模块名必须硬编码，同时代码压缩必须保证 factory 中的require 参数名保持不变。</p></td>
+    </tr>
+</table>
 
-name | age
----- | ---
-LearnShare | 12
-Mike |  32
+
