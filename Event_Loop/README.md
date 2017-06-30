@@ -155,4 +155,35 @@ check 阶段用于在 poll 阶段执行完成后立即执行回调。一旦 poll
 
 如果一个 socket 连接意外关闭，`close` 事件将推送到 close 阶段。正常关闭 `close` 事件则推送到 `process.nextTick()`。
 
+#### `setImmediate()` vs `setTimeout()`
+
+`setImmediate` 和 `setTimeout` 相似，在不同的调用场景下却又大不相同。
+
+`setImmediate()` 用于在 poll 阶段结束后执行脚本，而 `setTimeout()` 用于在给定时间阀值后执行脚本。
+
+两者的执行顺序与调用上下文有关，如果两者在主模板中同步调用，具体的执行时机和进程的性能有关，受同一机器中其他应用影响，执行先后顺序不确定。
+
+如下：
+
+```js
+// timeout_vs_immediate.js
+setTimeout(function timeout () {
+    console.log('timeout');
+},0);
+
+setImmediate(function immediate () {
+    console.log('immediate');
+});
+```
+
+```
+$ node timeout_vs_immediate.js
+timeout
+immediate
+
+$ node timeout_vs_immediate.js
+immediate
+timeout
+```
+
 
