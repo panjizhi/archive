@@ -68,9 +68,42 @@ _*注：Windows/Linux 在实现上存在细微的差异，但对本文的阐述�
 执行。
 
 
-### 各执行阶段详解
+### 执行阶段详解
 
 #### timers
 
+timers 用于指定回调函数在给定阀值时间之后执行，注意是在给定阀值时间之后执行，并不是在精确的阀值时间点执行。在给定阀值
+的时间过后，回调函数会尽可能快地被安排执行，然而实际的执行时间点会受到系统调度或其他操作执行影响而被延迟。
+
+_*注：技术上来讲，poll phase 控制了 timers 实际执行的时间*_
+
+看如下示例：
+
+```js
+var fs = require('fs');
+
+function someAsyncOperation (callback) {
+    // 假设读取文件消耗 95ms
+    fs.readFile('/path/to/file', callback);
+}
+
+var timeoutScheduled = Date.now();
+
+setTimeout(function () {
+    var delay = Date.now() - timeoutScheduled;
+    console.log(delay + "ms have passed since I was scheduled");
+}, 100);
+
+
+// someAsyncOperation 消耗 95ms 完成
+someAsyncOperation(function () {
+    var startCallback = Date.now();
+
+    // 执行耗时 10ms
+    while (Date.now() - startCallback < 10) {
+        ; // do nothing
+    }
+});
+```
 
 
