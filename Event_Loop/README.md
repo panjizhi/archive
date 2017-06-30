@@ -1,22 +1,23 @@
-# The Node.js Event Loop, Timers, and process.nextTick()
+# Node.js 中的 Event Loop、Timers 以及 process.nextTick()
 
 
 ## 什么是 Event Loop ？
 
-Event Loop 通过将 I/O 操作下发到系统内核执行，使单线程 JavaScript 引擎实现非阻塞 I/O 操作。
+Event Loop 通过将 I/O 操作下发到系统内核执行，使得单线程的 JavaScript 引擎实现非阻塞 I/O 操作。
 
-当前主流操作系统内核实现都是多线程，可同时在后台执行多个操作。当某个操作执行完，系统内核通知 NodeJS 
-将对应的回调函数推送到 poll 队列，并最终得以执行。
+当前主流操作系统内核实现都是多线程，可同时在后台执行多个操作。一旦某个操作执行完，系统内核通知 Node.js 
+将操作对应的回调函数推送到 poll 队列，并最终得以执行。
 
 
 ## Event Loop 详解
 
-NodeJS 启动后初始化 Event Loop，解析执行入口脚本文件，执行脚本中的异步 API 调用，时钟任务（timer），
-调用 `process.nextTick()`等，然后开始处理 Event Loop。
+Node.js 启动后初始化 Event Loop，执行入口脚本文件，执行完即进入 Event Loop 处理各种操作（包括：脚本中的异步 API 
+调用，定时任务，`process.nextTick()` 调用等）。
 
-下图展示了简化的 Event Loop 执行流程：
+下图展示了简化版的 Event Loop 执行流程：
 
  ```
+
    ┌───────────────────────┐
 ┌─>│        timers         │
 │  └──────────┬────────────┘
@@ -35,6 +36,7 @@ NodeJS 启动后初始化 Event Loop，解析执行入口脚本文件，执行�
 │  ┌──────────┴────────────┐
 └──┤    close callbacks    │
    └───────────────────────┘
+
  ```
 
  _*注：图例中每一个区块对应 Event Loop 中的一个执行阶段*_
@@ -47,7 +49,7 @@ Event Loop 顺序走到下一个阶段执行。
 就导致 poll 阶段的执行时常超过时钟任务的阀值，导致时钟任务 delay 执行时间多于预期。
 
 _*注：Windows/Linux 在实现上存在细微的差异，但对本文的阐述并无太多影响。实际上 Event Loop 分为七到八个阶段，然而实际
-上我们关心的，NodeJS 真正用到的也就是上图所述流程*_
+上我们关心的，Node.js 真正用到的也就是上图所述流程*_
 
 
 ### 概览
@@ -64,7 +66,7 @@ _*注：Windows/Linux 在实现上存在细微的差异，但对本文的阐述�
 
 + **close callbacks:** 比如：`socket.on('close', ...)`
 
-每次重新执行 Event Loop 时，NodeJS 检查是否还有等待执行的异步 I/O 操作或者时钟回调，没有则关闭 Event Loop 并退出
+每次重新执行 Event Loop 时，Node.js 检查是否还有等待执行的异步 I/O 操作或者时钟回调，没有则关闭 Event Loop 并退出
 执行。
 
 
