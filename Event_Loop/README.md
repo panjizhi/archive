@@ -229,5 +229,7 @@ timeout
 继续执行之前被调用。**通过递归调用 `process.nextTick()` ，可使 I/O 操作陷入 `饥饿` 状态，进而导致永远无法进入
 poll phase**，这是极为糟糕的场景。
 
+##### 为什么允许 process.nextTick() 机制存在？
+
 
 
