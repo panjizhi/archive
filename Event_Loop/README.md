@@ -106,4 +106,27 @@ someAsyncOperation(function () {
 });
 ```
 
+当 Event Loop 进入 poll 阶段时，由于 `fs.readFile` 尚未完成，poll 队列为空，于是开始等待，95 ms 之后 `fs.readFile`
+执行完成，对应的回调添加到 poll 队列并执行，10ms 之后完成回调函数的执行，同时 poll 队列为空，Event Loop 检查到时钟回调的
+时间阀值已经到达，返回 timers 阶段执行回调。可以看到，实际上时钟回调是 105ms 后才得以执行。
+
+_*注：为了避免 poll 阶段长期执行而陷入`饥饿`状态，libuv 硬编码 poll 阶段最大连续执行时长，具体值和系统相关*_
+
+
+#### I/O callbacks
+
+本阶段执行系统相关回调，比如：TCP 错误处理。当 TCP 尝试连接时收到 `ECONNREFUSED`，一些 *nix 系统希望报告此类错误，将在 I/O callbacks 得以执行。
+
+
+#### poll
+
+poll 阶段主要实现两个功能：
+
++ 执行到达时间阀值的时钟回调，然后
+
++ 处理 poll 队列中的回调
+
+
+
+
 
