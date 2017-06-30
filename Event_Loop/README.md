@@ -126,6 +126,18 @@ poll 阶段主要实现两个功能：
 
 + 处理 poll 队列中的回调
 
+当 Event Loop 进入 poll 阶段，且没有时钟回调函数，将执行如下分支：
+
++ 如果 poll 队列非空，Event Loop 将同步执行队列中的每一个回调，直到队列为空或者达到最大连续执行时间
+
++ 如果 poll 队列为空，走如下流程：
+
+    * 如果定时任务通过 `setImmediate()` 调用加载，Event Loop 将结束 poll 阶段，进入 check 阶段并执行定时回调
+
+    * 如果定时任务不是通过 `setImmediate()` 调用加载，Event Loop 将进入等待，直到有回调函数进入 poll 队列，并立即执行回调。
+
+一旦 poll 队列为空，Event Loop 将检查时钟函数 delay 阀值是否到达，如果到达，Event Loop 返回 timers 阶段执行对应的回调函数。
+
 
 
 
