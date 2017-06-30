@@ -122,48 +122,48 @@ _*注：为避免 poll phase 长期执行而陷入`饥饿`状态，libuv 硬编�
 
 #### poll
 
-poll 阶段主要实现两个功能：
+poll phase 主要完成两个功能：
 
-+ 执行到达时间阀值的时钟回调，然后
++ 执行到达时间阀值的定时回调，然后
 
-+ 处理 poll 队列中的回调
++ 处理 poll 队列中的事件
 
-当 Event Loop 进入 poll phase，且没有时钟回调函数，将执行如下分支：
+当 Event Loop 进入 poll phase，且没有定时回调，将执行如下分支：
 
 + 如果 poll 队列非空，Event Loop 将同步执行队列中的每一个回调，直到队列为空或者达到最大连续执行时间
 
 + 如果 poll 队列为空，走如下流程：
 
-    * 如果定时任务通过 `setImmediate()` 调用加载，Event Loop 将结束 poll 阶段，进入 check 阶段并执行定时回调
+    * 如果存在通过 `setImmediate()` 载入的定时回调，Event Loop 将结束 poll phase，进入 check phase 并执行回调
 
-    * 如果定时任务不是通过 `setImmediate()` 调用加载，Event Loop 将进入等待，直到有回调函数进入 poll 队列，并立即执行回调。
+    * 如果不存在通过 `setImmediate()` 载入的定时回调，Event Loop 将等待，直到有回调函数进入 poll 队列，并立即执行回调
 
-一旦 poll 队列为空，Event Loop 将检查时钟函数 delay 阀值是否到达，如果到达，Event Loop 返回 timers 阶段执行对应的回调函数。
+一旦 poll 队列为空，Event Loop 将检查定时函数是否到达 delay 阀值，如果到达，Event Loop 返回 timers phase 执行对应的回调函数。
 
 
 #### check
 
-check 阶段用于在 poll 阶段执行完成后立即执行回调。一旦 poll 空闲且有脚本通过 `setImmediate()` 加载，Event Loop 立即进入 check
+check phase 用于在 poll phase 执行完成后立即执行回调。一旦 poll 空闲且存在通过 `setImmediate()` 加载的回调，Event Loop 立即进入 check
 
-阶段并执行脚本。
+phase 并执行回调。
 
-`setImmediate()` 是一个特殊的时钟函数，用于在 poll 阶段完成后执行指定的回调函数。
+`setImmediate()` 是一个特殊的定时函数，用于在 poll phase 结束后执行指定的回调函数。
 
-一般来讲，程序开始执行后，Event Loop 最终会执行到 poll 阶段，然后等待 incoming 连接或者请求到来。但是，一旦有通过 `setImmediate()` 
-加载的回调并且 poll 阶段空闲， Event Loop 将进入 check 阶段并执行回调，而非继续等待。
+一般来讲，程序开始运行后，Event Loop 总会执行到 poll phase，然后等待 incoming 连接或者请求到来。但是，一旦存在 `setImmediate()` 
+加载的回调，并且 poll phase 处于空闲状态， Event Loop 将进入 check phase 并执行回调，而非继续等待。
 
 
 #### close callbacks
 
-如果一个 socket 连接意外关闭，`close` 事件将推送到 close 阶段。正常关闭 `close` 事件则推送到 `process.nextTick()`。
+如果一个 socket 连接或操作句柄意外关闭，`close` 事件将推送到 close phase。正常关闭的 `close` 事件则被推送到 `process.nextTick()` 处理。
 
 #### `setImmediate()` vs `setTimeout()`
 
-`setImmediate` 和 `setTimeout` 相似，在不同的调用场景下却又大不相同。
+`setImmediate` 和 `setTimeout` 都是实现定时回调，然而，在不同的执行环境中，两者的表象又各不相同。
 
-`setImmediate()` 用于在 poll 阶段结束后执行脚本，而 `setTimeout()` 用于在给定时间阀值后执行脚本。
+`setImmediate()` 用于在 poll phase 结束后执行回调，而 `setTimeout()` 用于在给定时间阀值后执行回调。
 
-两者的执行顺序与调用上下文有关，如果两者在主模板中同步调用，具体的执行时机和进程的性能有关，受同一机器中其他应用影响，执行先后顺序不确定。
+两者的执行顺序与调用上下文有关，中同步调用中，两者的实际执行时机不确定（和进程的性能有关，受同一机器中其他应用影响）。
 
 如下：
 
@@ -188,7 +188,7 @@ immediate
 timeout
 ```
 
-然而, 如果两者在 I/O 异步回调中执行，那么 `setImmediate()` 执行时机一定先于 `setTimeout()`。
+如果两者在异步 I/O 操作的回调函数中执行，那么 `setImmediate()` 一定先于 `setTimeout()` 被执行。
 
 ```js
 // timeout_vs_immediate.js
@@ -214,7 +214,7 @@ immediate
 timeout
 ```
 
-`setImmediate()` 的优势在于无论有多少个 timers 回调，只要是在异步 I/O 操作的执行上下文中，`setImmediate()` 一定先于 timers 执行。
+`setImmediate()` 的优势在于无论有多少个 timers 定时回调，只要是在异步 I/O 操作回调函数的上下文中执行，`setImmediate()` 一定先于 timers 执行。
 
 
 
