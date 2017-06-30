@@ -217,4 +217,17 @@ timeout
 `setImmediate()` 的优势在于无论有多少个 timers 定时回调，只要是在异步 I/O 操作回调函数的上下文中执行，`setImmediate()` 一定先于 timers 执行。
 
 
+#### `process.nextTick()`
+
+#####  理解 process.nextTick()
+
+也许你已经注意到，尽管 `process.nextTick()` 属于异步 API，然而它并没有出现在上述的流程图中。从专业的角度来看，
+`process.nextTick()` 确实不属于 Event Loop。无论当前执行环境处于 Event Loop 的哪一个 phase，`nextTickQueue` 
+都将在当前操作执行完之后被执行。
+
+回顾一下之前的流程图，无论处于哪一个 phase，一旦执行 `process.nextTick()` ，其对应的回调函数都将在 Event Loop 
+继续执行之前被调用。**通过递归调用 `process.nextTick()` ，可使 I/O 操作陷入 `饥饿` 状态，进而导致永远无法进入
+poll phase**，这是极为糟糕的场景。
+
+
 
