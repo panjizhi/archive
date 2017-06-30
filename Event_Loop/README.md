@@ -139,6 +139,20 @@ poll 阶段主要实现两个功能：
 一旦 poll 队列为空，Event Loop 将检查时钟函数 delay 阀值是否到达，如果到达，Event Loop 返回 timers 阶段执行对应的回调函数。
 
 
+#### check
 
+check 阶段用于在 poll 阶段执行完成后立即执行回调。一旦 poll 空闲且有脚本通过 `setImmediate()` 加载，Event Loop 立即进入 check
+
+阶段并执行脚本。
+
+`setImmediate()` 是一个特殊的时钟函数，用于在 poll 阶段完成后执行指定的回调函数。
+
+一般来讲，程序开始执行后，Event Loop 最终会执行到 poll 阶段，然后等待 incoming 连接或者请求到来。但是，一旦有通过 `setImmediate()` 
+加载的回调并且 poll 阶段空闲， Event Loop 将进入 check 阶段并执行回调，而非继续等待。
+
+
+#### close callbacks
+
+如果一个 socket 连接意外关闭，`close` 事件将推送到 close 阶段。正常关闭 `close` 事件则推送到 `process.nextTick()`。
 
 
