@@ -186,4 +186,33 @@ immediate
 timeout
 ```
 
+然而, 如果两者在 I/O 异步回调中执行，那么 `setImmediate()` 执行时机一定先于 `setTimeout()`。
+
+```js
+// timeout_vs_immediate.js
+var fs = require('fs')
+
+fs.readFile(__filename, () => {
+    setTimeout(() => {
+        console.log('timeout')
+    }, 0)
+    setImmediate(() => {
+        console.log('immediate')
+    })
+})
+```
+
+```
+$ node timeout_vs_immediate.js
+immediate
+timeout
+
+$ node timeout_vs_immediate.js
+immediate
+timeout
+```
+
+`setImmediate()` 的优势在于无论有多少个 timers 回调，只要是在异步 I/O 操作的执行上下文中，`setImmediate()` 一定先于 timers 执行。
+
+
 
