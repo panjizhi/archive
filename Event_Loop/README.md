@@ -8,6 +8,7 @@ Event Loop 通过将 I/O 操作下发到系统内核执行，使单线程 JavaSc
 当前主流操作系统内核实现都是多线程，可同时在后台执行多个操作。当某个操作执行完，系统内核通知 NodeJS 
 将对应的回调函数推送到 poll 队列，并最终得以执行。
 
+
 ## Event Loop 详解
 
 NodeJS 启动后初始化 Event Loop，解析执行入口脚本文件，执行脚本中的异步 API 调用，时钟任务（timer），
@@ -48,6 +49,7 @@ Event Loop 顺序走到下一个阶段执行。
 _*注：Windows/Linux 在实现上存在细微的差异，但对本文的阐述并无太多影响。实际上 Event Loop 分为七到八个阶段，然而实际
 上我们关心的，NodeJS 真正用到的也就是上图所述流程*_
 
+
 ### 概览
 
 + **timers:** 执行 setTimeout() 和 setInterval() 产生的时钟回调
@@ -62,8 +64,13 @@ _*注：Windows/Linux 在实现上存在细微的差异，但对本文的阐述�
 
 + **close callbacks:** 比如：`socket.on('close', ...)`
 
-每次重新执行 Event Loop 时，NodeJS 检查是否还有等待执行的异步 I/O 操作或者时钟回调，没有则关闭 Event Loop 并推出
+每次重新执行 Event Loop 时，NodeJS 检查是否还有等待执行的异步 I/O 操作或者时钟回调，没有则关闭 Event Loop 并退出
 执行。
+
+
+### 各执行阶段详解
+
+#### timers
 
 
 
