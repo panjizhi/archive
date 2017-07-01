@@ -231,5 +231,23 @@ poll phase**，这是极为糟糕的场景。
 
 ##### 为什么允许 process.nextTick() 机制存在？
 
+为什么 Node.js 中会存在 `process.nextTick()` 这样的机制？原因在于 Node.js 内在的设计哲学：API 总是以异步方式调用执行。
+请看如下代码：
+
+```js
+function apiCall (arg, callback) {
+    if (typeof arg !== 'string')
+        return process.nextTick(callback,
+            new TypeError('argument should be string'));
+}
+```
+
+上述代码主要是校验 `arg` 参数的类型，如果 `arg` 参数不是字符串类型，则将错误对象传递给 callback 处理。
+
+假设我们期望的场景是在当前操作执行完之后，调用 callback 函数，将错误信息展示给用户。使用 `process.nextTick()` 
+就能保证 callback 回调在当前 apiCall 操作执行完成之后、下一次 Event Loop 继续处理之前被调用。
+
+Node.js 允许调用栈在执行完当前操作之后释放执行权限，立即执行 `process.nextTick()` 中的回调函数。且允许递归调用
+ `process.nextTick()` 执行多个回调，不会触发 `RangeError: Maximum call stack size exceeded from v8.`
 
 
