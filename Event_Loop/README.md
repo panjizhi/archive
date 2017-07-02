@@ -250,4 +250,58 @@ function apiCall (arg, callback) {
 Node.js 允许调用栈在执行完当前操作之后释放执行权限，立即执行 `process.nextTick()` 中的回调函数。且允许递归调用
  `process.nextTick()` 执行多个回调，不会触发 `RangeError: Maximum call stack size exceeded from v8.`
 
+这样的设计哲学存在潜在问题，请看如下代码：
+
+```js
+// this has an asynchronous signature, but calls callback synchronously
+function someAsyncApiCall (callback) { callback(); };
+
+// the callback is called before `someAsyncApiCall` completes.
+someAsyncApiCall(() => {
+
+    // since someAsyncApiCall has completed, bar hasn't been assigned any value
+        console.log('bar', bar); // undefined
+
+});
+
+var bar = 1;
+```
+
+`someAsyncApiCall` 函数看起来像异步回调，而实际上 callback 是同步执行，执行 callback 时，由于 JS 变量定义前置
+的机制，`bar` 变量已经定义，但尚未赋值，程序输出 `undefined`。
+
+利用 `process.nextTick()` 调整代码：
+
+```js
+function someAsyncApiCall (callback) {
+    process.nextTick(callback);
+};
+
+someAsyncApiCall(() => {
+    console.log('bar', bar); // 1
+});
+
+var bar = 1;
+```
+
+上述代码中，callback 会在当前代码全部执行完，即将进入下一个 Event Loop phase 之前被执行。这样既保证 callback 调用
+时 bar 变量被正确赋值，同时也保证了 callback 先于下一个 Event Loop phase 执行。
+
+
+#### `process.nextTick()` vs `setImmediate()`
+
+两者功能相似确又容易混淆。`process.nextTick()` 在同一个 Event Loop phase 中立即执行，而 `setImmediate()` 则
+是在 check phase 被执行。实际上，就名字而言，两者的名称交换一下更为合理，然而由于历史的原因，如果交换两者名称，`npm` 中大
+量有依赖的包将不可用，随着时间推移，有依赖的包变得越来越多，矫正命名更是不可能。
+
+*我们推荐开发者在开发过程中尽可能使用 `setImmediate()`，更易于理解，且在多个执行环境中兼容，包括浏览器*
+
+
+#### 什么情况下用 `process.nextTick()` ?
+
+如下两种场景：
+
+1. 错误处理，清除无用资源，或者是实现在 `event loop` 继续执行之前重新发起请求
+
+2. 回调函数期望在当前调用栈释放之后、进入下一个 Event Loop phase 前被执行的场景
 
