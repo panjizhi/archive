@@ -156,15 +156,15 @@ check phase 用于在 poll phase 执行完成后立即执行回调。一旦 poll
 
 #### close callbacks
 
-如果一个 socket 连接或操作句柄意外关闭，`close` 事件将推送到 close phase。正常关闭的 `close` 事件则被推送到 `process.nextTick()` 处理。
+当 socket 连接或操作句柄意外关闭，对应的 `close` 事件将推送到 close phase。其他情况通过 `process.nextTick()` 处理 `close` 事件。
 
 #### `setImmediate()` vs `setTimeout()`
 
-`setImmediate` 和 `setTimeout` 都是实现定时回调，然而，在不同的执行环境中，两者的表象又各不相同。
+`setImmediate` 和 `setTimeout` 都是实现定时回调，然而，在不同的执行环境中，两者的表现又各不相同。
 
-`setImmediate()` 用于在 poll phase 结束后执行回调，而 `setTimeout()` 用于在给定时间阀值后执行回调。
+`setImmediate()` 用于在 poll phase 结束后执行回调，而 `setTimeout()` 用于在给定时间延迟后执行回调。
 
-两者的执行顺序与调用上下文有关，中同步调用中，两者的实际执行时机不确定（和进程的性能有关，受同一机器中其他应用影响）。
+两者的执行顺序与调用上下文有关，主入口的同步调用中，两者的实际执行时机并不确定（和进程的性能有关，受同一机器中其他应用影响）。
 
 如下：
 
@@ -222,17 +222,19 @@ timeout
 
 #####  理解 process.nextTick()
 
-也许你已经注意到，尽管 `process.nextTick()` 属于异步 API，然而它并没有出现在上述的流程图中。从专业的角度来看，
-`process.nextTick()` 确实不属于 Event Loop。无论当前执行环境处于 Event Loop 的哪一个 phase，`nextTickQueue` 
-都将在当前操作执行完之后被执行。
+也许你已经注意到，尽管 `process.nextTick()` 属于异步 API，然而它并没有出现在上述的流程图中。从技术的角度来看，
+`process.nextTick()` 并不属于 Event Loop。无论当前操作处于 Event Loop 的哪一个 phase，`nextTickQueue` 
+都将会在当前操作完成之后被调用执行。
 
-回顾一下之前的流程图，无论处于哪一个 phase，一旦执行 `process.nextTick()` ，其对应的回调函数都将在 Event Loop 
-继续执行之前被调用。**通过递归调用 `process.nextTick()` ，可使 I/O 操作陷入 `饥饿` 状态，进而导致永远无法进入
-poll phase**，这是极为糟糕的场景。
+回顾一下之前的流程图，无论当前的操作处于哪一个 phase，只要执行 `process.nextTick()` 推送回调函数，回调函数将在
+本次操作执行完，Event Loop 进入下一个 phase 之前被调用执行。**如果出现递归调用 `process.nextTick()` ，将导致
+ I/O 操作陷入 `饥饿` 状态，最终程序执行无法进入到 poll phase**，这是极端糟糕的场景。
 
 ##### 为什么允许 process.nextTick() 机制存在？
 
-为什么 Node.js 中会存在 `process.nextTick()` 这样的机制？原因在于 Node.js 内在的设计哲学：API 总是以异步方式调用执行。
+为什么 Node.js 中会存在 `process.nextTick()` 这样的机制？原因在于 Node.js 的设计哲学：无论实际需要与否，任何 API 
+都应当允许通过异步的方式调用。
+
 请看如下代码：
 
 ```js
@@ -243,15 +245,16 @@ function apiCall (arg, callback) {
 }
 ```
 
-上述代码主要是校验 `arg` 参数的类型，如果 `arg` 参数不是字符串类型，则将错误对象传递给 callback 处理。
+上述代码主要是校验 `arg` 参数的类型，如果 `arg` 参数不是字符串类型，则将错误信息传递给 callback 处理。
 
-假设我们期望的场景是在当前操作执行完之后，调用 callback 函数，将错误信息展示给用户。使用 `process.nextTick()` 
-就能保证 callback 回调在当前 apiCall 操作执行完成之后、下一次 Event Loop 继续处理之前被调用。
+假设我们的期望是在当前操作执行完之后，如果参数不合规范，调用 callback 函数，处理错误信息并展示给用户。
+使用 `process.nextTick()` 就能实现 callback 在当前 apiCall 操作执行完成之后、Event Loop 进入下一个
+phase 之前被调用。
 
-Node.js 允许调用栈在执行完当前操作之后释放执行权限，立即执行 `process.nextTick()` 中的回调函数。且允许递归调用
- `process.nextTick()` 执行多个回调，不会触发 `RangeError: Maximum call stack size exceeded from v8.`
+Node.js 允许执行完当前操作之后，调用栈临时释放执行权限，执行 `process.nextTick()` 推送的回调函数。同时
+还允许递归调用 `process.nextTick()` 执行多个回调，且不会触发 `RangeError: Maximum call stack size exceeded from v8.`
 
-这样的设计哲学存在潜在问题，请看如下代码：
+这种设计思想存在潜在问题，请看如下代码：
 
 ```js
 // this has an asynchronous signature, but calls callback synchronously
@@ -261,15 +264,15 @@ function someAsyncApiCall (callback) { callback(); };
 someAsyncApiCall(() => {
 
     // since someAsyncApiCall has completed, bar hasn't been assigned any value
-        console.log('bar', bar); // undefined
+    console.log('bar', bar); // undefined
 
 });
 
 var bar = 1;
 ```
 
-`someAsyncApiCall` 函数看起来像异步回调，而实际上 callback 是同步执行，执行 callback 时，由于 JS 变量定义前置
-的机制，`bar` 变量已经定义，但尚未赋值，程序输出 `undefined`。
+`someAsyncApiCall` 函数看起来像异步回调，而实际上 callback 是同步执行，执行 callback 时，基于 JS 变量定义前置
+的机制，`bar` 变量已经定义，但尚未赋值，因此程序输出 `undefined`。
 
 利用 `process.nextTick()` 调整代码：
 
@@ -292,17 +295,17 @@ var bar = 1;
 #### `process.nextTick()` vs `setImmediate()`
 
 两者功能相似确又容易混淆。`process.nextTick()` 在同一个 Event Loop phase 中立即执行，而 `setImmediate()` 则
-是在 check phase 被执行。实际上，就名字而言，两者的名称交换一下更为合理，然而由于历史的原因，如果交换两者名称，`npm` 中大
-量有依赖的包将不可用，随着时间推移，有依赖的包变得越来越多，矫正命名更是不可能。
+是在 check phase 被执行。实际上，两者的名称交换一下更为合理。然而由于历史的原因，如果现在交换两者名称，`npm` 中大
+量有依赖的包将不可用，而随着时间推移，有依赖的包变得越来越多，矫正命名更是不可能。
 
-*我们推荐开发者在开发过程中尽可能使用 `setImmediate()`，更易于理解，且在多个执行环境中兼容，包括浏览器*
+**我们推荐开发者在开发过程中尽可能使用 `setImmediate()`，其更易于理解，且在多个执行环境中兼容，包括浏览器**
 
 
-#### 什么情况下用 `process.nextTick()` ?
+#### 什么情况下使用 `process.nextTick()` ?
 
-如下两种场景：
+两种场景：
 
-1. 错误处理，清除无用资源，或者是实现在 `event loop` 继续执行之前重新发起请求
+1. 错误处理，清理无用资源，或是实现在 `event loop` 继续执行之前重新发起请求
 
 2. 回调函数期望在当前调用栈释放之后、进入下一个 Event Loop phase 前被执行的场景
 
