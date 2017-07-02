@@ -3,16 +3,16 @@
 
 ## 什么是 Event Loop ？
 
-Event Loop 通过将 I/O 操作下发到系统内核执行，使得单线程的 JavaScript 引擎实现非阻塞 I/O 操作。
+Event Loop 通过将 I/O 操作下发到系统内核执行，使单线程的 JavaScript 引擎实现非阻塞 I/O 操作。
 
-当前主流操作系统内核实现都是多线程，可同时在后台执行多个操作。一旦某个操作执行完，系统内核通知 Node.js 
-将操作对应的回调函数推送到 poll 队列，并最终得以执行。
+当前主流操作系统都采用了多线程实现方式，可在后台同时处理多个任务。当某个具体操作执行完成，系统立刻通知 Node.js 
+将操作对应的回调函数推送到 poll 队列，由 Event Loop 调用执行。
 
 
 ## Event Loop 详解
 
-Node.js 启动后初始化 Event Loop，执行入口脚本文件，执行完即进入 Event Loop 处理各种操作（包括：脚本中的异步 API 
-调用，定时任务，`process.nextTick()` 调用等）。
+Node.js 在启动后，首先初始化 Event Loop，随后开始执行入口脚本文件，执行完进入 Event Loop ，处理入口文件中定
+义的各种异步操作（异步 API 调用，定时任务，`process.nextTick()` 调用等）。
 
 下图展示了简化版的 Event Loop 执行流程：
 
@@ -39,23 +39,23 @@ Node.js 启动后初始化 Event Loop，执行入口脚本文件，执行完即�
 
  _*注：图例中每一个区块对应 Event Loop 中的一个 `phase`*_
 
-每个 `phase` 都维护一个 FIFO 回调队列。尽管每个 `phase` 都各有其特点，总的来看，一旦进到某一 `phase` ，
-该 `phase` 相关的操作将被执行，然后执行 `phase` 对应的回调队列，直到队列为空，或是达到最大回调执行上线。
-当执行完队列中的全部回调或是达到最大执行上线，Event Loop 顺序进到下一个 `phase` 执行。
+每个 `phase` 都维护一个 FIFO 回调队列。尽管每个 `phase` 的执行过程都会略有差异，总的来看，当 Event Loop 进
+到特定的 `phase` ，立即执行当前 `phase` 涉及的操作，随后执行 `phase` 回调队列，直到队列全部执行完，或是达到
+回调函数最大执行数的上线。当执行完队列中的全部回调或达到回调函数最大执行数上线时，Event Loop 进到下一个 `phase` 。
 
-任意操作执行过程中，都可以插入新的操作，同时系统内核会将新的事件推送到 `poll phase` 的回调队列，处理 poll 
-回调时还可以向 `poll phase` 回调队列中继续推送事件。这就会出现 `poll phase` 执行时间过长，以至于超过定时
-任务的时间阀值，导致定时任务实际 delay 时间多于预期。
+需要注意的是，在执行的过程中，允许随时添加新的执行任务，同时，系统随时会将需要执行的 I／O 操作回调推送到 `poll phase` 
+的回调队列（即便是 Event Loop 正在执行 poll 队列）。这就会不断增大 `poll phase` 的执行时间，以至于超过定时任务
+的时间阀值，最终导致定时任务实际 delay 时间超过预期。
 
-_*注：尽管 Windows/Linux 实现上存在细微的差异，但并不影响本文基本原理的阐述。实际上 Event Loop 可分为七、
-八个步骤，而实际上我们所关心的，Node.js 真正用到的也就是上图所述流程*_
+_*注：尽管 Windows/Linux 实现上存在差异，但并不影响本文对 Event Loop 基本原理的阐述。实际上 Event Loop 可分为七、
+八个步骤，我们需要关注的、Node.js 真正用到的也就是上图所述流程*_
 
 
 ### `phase` 概览
 
-+ **timers:** 执行 setTimeout() 和 setInterval() 产生的定时回调
++ **timers:** 执行 setTimeout() 和 setInterval() 指定的定时回调
 
-+ **I/O callbacks:** 执行除了 `close callbacks`、定时回调、以及 `setImmediate()` 回调之外的一切回调
++ **I/O callbacks:** 执行除了 `close callbacks`、定时回调、以及 `setImmediate()` 回调除外的一切回调
 
 + **idle, prepare:** 仅限于内部使用
 
@@ -65,16 +65,16 @@ _*注：尽管 Windows/Linux 实现上存在细微的差异，但并不影响本
 
 + **close callbacks:** 比如：`socket.on('close', ...)`
 
-每次重新执行 Event Loop 时，Node.js 检查是否有等待执行的异步 I/O 操作或者定时回调，如果没有则关闭 Event Loop 
-并退出执行。
+每次重新执行 Event Loop 时，Node.js 检查是否存在尚未执行的异步 I/O 操作或者定时回调，如果没有则关闭 Event Loop 
+并结束当前任务。
 
 
 ###  `phase` 详解
 
 #### timers
 
-timers 用作定时回调，在指定的时间阀值之后执行回调函数，注意是在 *给定阀值时间之后* 执行，而不是在 *精确的阀值时间点* 执行。
-在指定的时间阀值过后，回调函数会尽可能快地被安排执行，然而实际的执行时间点会受到系统调度或其他操作的影响而被延迟。
+timers 用作定时回调，指定特定的时间延迟后执行回调。注意是在 **给定的时间延迟之后** 执行，而不是在 **精确的延迟时间点** 执行。
+在给定的时间阀值过后，回调函数会尽可能快地被安排执行，然而实际的执行时间点会受到系统调度或其他操作的影响而被延迟。
 
 _*注：技术上来讲，poll phase 控制 timers 回调的实际执行的时间*_
 
