@@ -12,7 +12,7 @@
 
 ## 写在最前面
 
-**_确保「HTML结构合乎自然观感」总是值得的。_**
+**_确保「HTML结构合乎自然观感」总是对的。_**
 
 
 ## ie6/7
@@ -29,7 +29,7 @@
 #doce { *color: blue; /* or #color: blue */ }
 ```
 
-<http://www.paulirish.com/2009/browser-specific-css-hacks/> 
+    <http://www.paulirish.com/2009/browser-specific-css-hacks/> 
 
 + 不支持 `outline`
 
@@ -51,9 +51,9 @@ zoom: 1;
 
 多数时候，ie6/7 下的布局问题都可以通过触发 hasLayout 解决。
 
-<http://riny.net/2013/haslayout/>
+    <http://riny.net/2013/haslayout/>
 
-<https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
+    <https://msdn.microsoft.com/en-us/library/bb250481(v=vs.85).aspx>
 
 + `inline-block` 样式
 
