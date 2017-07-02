@@ -1,11 +1,11 @@
 # 并发模型与 Event Loop
 
-JavaScript 基于 event loop 实现了并发模型。JavaScript 中的并发模型和 C、Java 中的并发模型大不相同。
+JavaScript 基于 event loop 实现了并发模型。JavaScript 中的并发模型和 C、Java 中的并发模型迥然不同。
 
 
 ## Runtime 概念
 
-本文阐述的是理论性的模型，现实中 JavaScript 引擎的实现针对理论模型做了大幅优化调整。
+本文阐述的是理论性的模型，现实中 JavaScript 引擎针对理论模型做了大幅优化调整。
 
 
 ### 直观展示
@@ -17,7 +17,7 @@ JavaScript 基于 event loop 实现了并发模型。JavaScript 中的并发模�
 
 ### 栈
 
-先来看函数调用过程中的 `栈` 结构 (* stack frames*)。如下：
+先来看函数调用过程中的 `栈` 结构 (*stack frames*)。如下：
 
 ```js
 function foo(b) {
