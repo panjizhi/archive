@@ -10,7 +10,9 @@ JavaScript 基于 event loop 实现了并发模型。JavaScript 中的并发模�
 
 ### 直观展示
 
-![event loop](./img/browser_event_loop.svg)
+<div  align="center">    
+    <img src="./img/browser_event_loop.svg" width="270" height="270" alt="event loop" align=center />
+</div>
 
 ## 什么是 Event Loop ？
 
