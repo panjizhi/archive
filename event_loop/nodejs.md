@@ -111,57 +111,57 @@ someAsyncOperation(function () {
 });
 ```
 
-当 Event Loop 进入 poll phase 时，`fs.readFile` 尚未完成，poll 队列为空，于是等待，95 ms 之后 `fs.readFile`
-执行完成，对应的回调添加到 poll 队列并执行，10ms 之后 readFile 回调函数执行完，且 poll 队列再次为空，Event Loop 
-检查到定时回调的延迟时间阀值已经到达，Event Loop 返回 timers phase 执行定时回调。可以看到，定时回调实际上延迟了 105ms 
+Event Loop 进入 poll phase 时，`fs.readFile` 操作尚未完成，poll 队列为空，于是开始等待，95 ms 之后 `fs.readFile`
+执行完成，对应的回调函数被添加到 poll 队列并立即执行，10ms 之后 readFile 回调函数执行完，此时 poll 队列再次为空，Event Loop
+检查到定时回调的延迟时间已经达到给定阈值，Event Loop 返回 timers phase 执行定时回调。可以看到，定时回调实际上延迟了 105ms 
 后才得以执行。
 
-_*注：为避免 poll phase 长期占用执行进程而陷入`饥饿`状态，libuv 硬编码指定 poll phase 的最大连续执行时长（具体值
+_*注：为避免 poll phase 长期占用执行进程而陷入`饥饿`状态，libuv 通过硬编码指定 poll phase 的最大连续执行时长（具体值
 和系统相关），一旦达到最大值， poll phase 将停止处理 poll 事件*_
 
 
 #### I/O callbacks
 
 执行系统操作相关的回调，比如：TCP 错误处理。当 TCP 在尝试建立连接时收到 `ECONNREFUSED`，一些 *nix 系统期望报告此类错误，
-错误处理回调将在 I/O callbacks 得以执行。
+处理错误的回调函数将在 I/O callbacks 得以执行。
 
 
 #### poll
 
-poll phase 主要完成两项功能：
+poll phase 完成两项功能：
 
-+ 执行到达时间延迟阀值的定时回调，然后
+1. 执行时间延迟到达给定阈值的定时回调，然后
 
-+ 处理 poll 队列中的回调事件
+2. 处理 poll 队列中的回调事件
 
 当 Event Loop 进入 poll phase，且没有定时回调，执行如下分支：
 
-+ 如果 poll 队列非空，Event Loop 将同步顺序执行队列中的每一个回调，直到队列为空或者达到最大连续执行时间
++ 如果 poll 队列非空，Event Loop 同步、顺序执行队列中的每一个回调，直到队列为空或者达到最大连续执行时间
 
 + 如果 poll 队列为空，走如下流程：
 
-    * 如果存在 `setImmediate()` 载入的定时回调，Event Loop 结束 poll phase，进入 check phase 并执行回调
+    * 如果存在 `setImmediate()` 载入的回调，Event Loop 结束 poll phase，进入 check phase 并执行回调
 
-    * 如果不存在 `setImmediate()` 载入的定时回调，Event Loop 进入等待，直到有新的回调事件进入 poll 队列，并立即执行回调
+    * 如果不存在 `setImmediate()` 载入的回调，Event Loop 开始等待，直到有新的回调事件进入 poll 队列，并立即执行回调
 
 一旦 poll 队列为空，Event Loop 将检查定时函数是否到达 delay 阀值，如果到达，Event Loop 返回 timers phase 执行对应的回调函数。
 
 
 #### check
 
-check phase 用于在 poll phase 执行完成后立即执行回调。一旦 poll 空闲且存在通过 `setImmediate()` 加载的回调，Event Loop 
+check phase 用于在 poll phase 结束后立即执行回调。一旦 poll 空闲且存在通过 `setImmediate()` 加载的回调，Event Loop
 立即进入 check phase 并执行回调。
 
 `setImmediate()` 是一个特殊的定时函数，用于在 poll phase 结束后执行指定的回调函数。
 
-一般来讲，程序开始运行后，Event Loop 最终都会进入 poll phase，等待 incoming 连接或请求的到来。如果存在 `setImmediate()` 
-定义的定时回调，一旦 poll phase 处于空闲状态，Event Loop 直接进入 check phase 并执行 `setImmediate()` 定义的回调，
-否则 Event Loop 停留在 poll phase 等待新的事件到来。
+进入 poll phase 后，如果存在 `setImmediate()` 回调，只要 poll phase 空闲，Event Loop 直接进入 check phase 并执行
+`setImmediate()` 回调。否则，Event Loop 继续停留在 poll phase，等待新的事件到来（incoming 连接请求）。
 
 
 #### close callbacks
 
-当 socket 连接或操作句柄意外关闭，对应的 `close` 事件将推送到 close phase。其他情况通过 `process.nextTick()` 处理 `close` 事件。
+当 socket 连接或操作句柄 *意外关闭* ，对应的 `close` 事件将推送到 close phase 处理。其他情况下，通常使用 `process.nextTick()`
+处理 `close` 事件。
 
 #### `setImmediate()` vs `setTimeout()`
 
