@@ -1,4 +1,4 @@
-# 剖析一次完整的 HTTP 交互
+# HTTP 交互剖析
 
 ## 创建 Web server
 
@@ -66,4 +66,7 @@ request.on('error', function(err) {
   console.error(err.stack);
 });
 ```
+
+## 阶段性成果
+
 
