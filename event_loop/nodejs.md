@@ -165,11 +165,12 @@ check phase 用于在 poll phase 结束后立即执行回调。一旦 poll 空�
 
 #### `setImmediate()` vs `setTimeout()`
 
-`setImmediate` 和 `setTimeout` 都是实现定时回调，然而，在不同的执行环境中，两者的表现又各不相同。
+`setImmediate` 和 `setTimeout` 都是实现定时回调。在不同的上下文执行环境中，两者的表现各不相同。
 
-`setImmediate()` 用于在 poll phase 结束后执行回调，而 `setTimeout()` 用于在给定时间延迟后执行回调。
++ `setImmediate()` 用于在 poll phase 结束后执行回调
++ `setTimeout()` 用于在给定时间延迟后执行回调
 
-两者的执行顺序与调用上下文有关，主入口的同步调用中，两者的实际执行时机并不确定（和进程的性能有关，受同一机器中其他应用影响）。
+两者的执行顺序与调用上下文有关，对于入口脚本中的同步调用，两者执行的先后顺序是不确定的（和进程的性能有关，受同一机器中其他应用影响）。
 
 如下：
 
@@ -194,7 +195,7 @@ immediate
 timeout
 ```
 
-如果两者在异步 I/O 操作的回调函数中执行，那么 `setImmediate()` 一定先于 `setTimeout()` 被执行。
+对于异步 I/O 操作回调函数中的调用，`setImmediate()` 一定先于 `setTimeout()` 执行。
 
 ```js
 // timeout_vs_immediate.js
@@ -220,25 +221,25 @@ immediate
 timeout
 ```
 
-`setImmediate()` 的优势在于无论有多少个 timers 定时回调，只要是在异步 I/O 操作回调函数的上下文中执行，`setImmediate()` 一定先于 timers 执行。
+`setImmediate()` 的优势在于无论有多少个 timers 回调，只要是处在异步 I/O 回调函数中执行，`setImmediate()` 执行一定先于 timers 回调。
 
 
 #### `process.nextTick()`
 
 #####  理解 process.nextTick()
 
-也许你已经注意到，尽管 `process.nextTick()` 属于异步 API，然而它并没有出现在上述的流程图中。从技术的角度来看，
+也许你已经注意到，尽管 `process.nextTick()` 也属于异步 API，然而它并没有出现在上述的流程图中。从技术的角度来讲，
 `process.nextTick()` 并不属于 Event Loop。无论当前操作处于 Event Loop 的哪一个 phase，`nextTickQueue` 
 都将会在当前操作完成之后被调用执行。
 
-回顾一下之前的流程图，无论当前的操作处于哪一个 phase，只要执行 `process.nextTick()` 推送回调函数，回调函数将在
-本次操作执行完，Event Loop 进入下一个 phase 之前被调用执行。**如果出现递归调用 `process.nextTick()` ，将导致
- I/O 操作陷入 `饥饿` 状态，最终程序执行无法进入到 poll phase**，这是极端糟糕的场景。
+回顾之前的流程图，无论当前操作处于哪一个 phase，只要执行 `process.nextTick()` 注册回调函数，回调函数都将在本次操作执行完，
+Event Loop 进入下一个 phase 之前被调用。存在这样一种极端场景：**如果在 poll phase 之前递归调用 `process.nextTick()`，
+程序将无法进入到 poll phase，导致 I/O 操作陷入 `饥饿` 状态而永远都得不到处理。**
 
 ##### 为什么允许 process.nextTick() 机制存在？
 
-为什么 Node.js 中会存在 `process.nextTick()` 这样的机制？原因在于 Node.js 的设计哲学：无论实际需要与否，任何 API 
-都应当允许通过异步的方式调用。
+为什么 Node.js 中会存在 `process.nextTick()` 这样的机制？部分原因在于 Node.js 的设计哲学：任何 API 都应当允许通过异步的方式调用，
+无论其是否真的需要。
 
 请看如下代码：
 
@@ -252,14 +253,14 @@ function apiCall (arg, callback) {
 
 上述代码主要是校验 `arg` 参数的类型，如果 `arg` 参数不是字符串类型，则将错误信息传递给 callback 处理。
 
-假设我们的期望是在当前操作执行完之后，如果参数不合规范，调用 callback 函数，处理错误信息并展示给用户。
-使用 `process.nextTick()` 就能实现 callback 在当前 apiCall 操作执行完成之后、Event Loop 进入下一个
+假设我们的期望是不管参数是否有效，都先顺序执行 `apiCall` 函数中的同步操作，之后才调用 `callback` 处理错误信息并展示给用户。
+使用 `process.nextTick()` 就能实现 callback 在当前 apiCall 同步操作执行完成之后、Event Loop 进入下一个
 phase 之前被调用。
 
-Node.js 允许执行完当前操作之后，调用栈临时释放执行权限，执行 `process.nextTick()` 推送的回调函数。同时
-还允许递归调用 `process.nextTick()` 执行多个回调，且不会触发 `RangeError: Maximum call stack size exceeded from v8.`
+处理完当前 phase 的同步操作，Event Loop 调用栈会临时释放执行权限，执行 `process.nextTick()` 注册的回调函数。
+同时还允许循环调用 `process.nextTick()` 注册执行多个回调，而且还不会触发 `RangeError: Maximum call stack size exceeded from v8.`
 
-这种设计思想存在潜在问题，请看如下代码：
+需要特别注意各种方式下回调函数的执行时机，看如下代码：
 
 ```js
 // this has an asynchronous signature, but calls callback synchronously
@@ -276,8 +277,8 @@ someAsyncApiCall(() => {
 var bar = 1;
 ```
 
-`someAsyncApiCall` 函数看起来像异步回调，而实际上 callback 是同步执行，执行 callback 时，基于 JS 变量定义前置
-的机制，`bar` 变量已经定义，但尚未赋值，因此程序输出 `undefined`。
+`someAsyncApiCall` 函数看起来像异步回调，而实际上 callback 是同步执行，执行 callback 时，由于 JS 变量定义前置，
+`bar` 变量已经定义，但尚未赋值，因此程序输出 `undefined`。
 
 利用 `process.nextTick()` 调整代码：
 
@@ -293,17 +294,17 @@ someAsyncApiCall(() => {
 var bar = 1;
 ```
 
-上述代码中，callback 会在当前代码全部执行完，即将进入下一个 Event Loop phase 之前被执行。这样既保证 callback 调用
-时 bar 变量被正确赋值，同时也保证了 callback 先于下一个 Event Loop phase 执行。
+上述代码中，callback 会在当前代码全部执行完，进入下一个 Event Loop phase 之前被执行。这样既保证 callback 调用
+时 bar 变量被正确赋值，同时也保证了 callback 先于 Event Loop 的下一个 phase 执行。
 
 
 #### `process.nextTick()` vs `setImmediate()`
 
-两者功能相似确又容易混淆。`process.nextTick()` 在同一个 Event Loop phase 中立即执行，而 `setImmediate()` 则
-是在 check phase 被执行。实际上，两者的名称交换一下更为合理。然而由于历史的原因，如果现在交换两者名称，`npm` 中大
-量有依赖的包将不可用，而随着时间推移，有依赖的包变得越来越多，矫正命名更是不可能。
+两者功能相似确又容易混淆。`process.nextTick()` 在同一个 phase 执行完成后立即被执行，而 `setImmediate()` 则是在
+check phase 中执行。实际上 `process.nextTick()` 先于 `setImmediate()` 执行，两者的名称交换一下更为合理。
+然而仅仅是想想而已，矫正命名是不可能的。如果交换两者名称，`npm` 中大量有依赖的包将不可用，而随着时间推移，有依赖的包只会变得越来越多。
 
-**我们推荐开发者在开发过程中尽可能使用 `setImmediate()`，其更易于理解，且在多个执行环境中兼容，包括浏览器**
+**推荐开发者在开发过程中尽可能使用 `setImmediate()`，其更易于理解，且在多个执行环境中兼容，包括浏览器**
 
 
 #### 什么情况下使用 `process.nextTick()` ?
