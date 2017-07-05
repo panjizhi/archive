@@ -79,7 +79,7 @@ while (queue.waitForMessage()) {
 在指定的延迟后，回调函数未必就能立即执行。_**
 
 
-### 零延迟执行
+### `setTimeout` 零延迟
 
 ```js
 (function() {
@@ -109,7 +109,7 @@ while (queue.waitForMessage()) {
 "this is a msg from call back1"
 ```
 
-setTimeout 指定的回调并不会按照语句定义的顺序执行，只有在当前同步操作全部执行完之后，消息队列中的消息才会被处理。
+`setTimeout` 指定的回调并不会按照代码顺序执行，只有在同步操作全部执行完之后，消息队列中的消息才会被处理。
 
 
 ### 多个 runtimes 间的通信
@@ -118,7 +118,7 @@ setTimeout 指定的回调并不会按照语句定义的顺序执行，只有在
 通过 `postMessage` 向目标 runtime 中的消息队列添加新消息，从而实现交互。
 
 
-### Never blocking
+## Never blocking
 
-JavaScript 中的 event loop 最大的特点是非阻塞的执行方式，通过事件回调实现异步 I/O 操作。
+JavaScript 中的 event loop 最大的特点就是非阻塞的执行方式，通过事件回调实现异步 I/O 操作。
 
