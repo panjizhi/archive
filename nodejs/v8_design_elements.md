@@ -1,17 +1,17 @@
 # V8 Design Elements
 
-上世纪90年代中期，JavaScript 首次应用在网景公司的 Netscape Navigator 浏览器，JavaScript 的到来使得 web
-开发者可以十分方便地操作 HTML 元素（比如：表单、frames、图片）。JavaScript 越来越多地被用来实现动态网页效果。
-到90年代后期，大部分 JavaScript 脚本主要用来响应用户鼠标操作，实现图片的简单切换。
+上世纪 90 年代中期，JavaScript 首次应用在网景公司的 Netscape Navigator 浏览器，JavaScript 的出现使得 web
+开发者可以十分方便地操作 HTML 元素（比如：表单、frames、图片）。JavaScript 也越来越多地被用来实现动态网页效果。
+到 90 年代后期，大部分 JavaScript 脚本的主要功能是用来响应用户鼠标操作，实现图片的简单切换。
 
-后来，随着 AJAX 的兴起，JavaScript 逐渐成了实现 web 应用的核心技术，比如：谷歌公司的 GMail。JavaScript
-代码的复杂度直线上升，从最初的数行代码变为数百 KB。一方面，JavaScript 确实非常适合作为 web 应用的开发语言，
-另一方面，JavaScript 的执行性能成了制约开发大型复杂 web 应用系统的关键因素。
+随着 AJAX 的兴起，JavaScript 逐渐成为开发 web 应用的核心技术，比如谷歌公司的 GMail。JavaScript 代码复杂度直线上升，
+从最初的数行代码变为数百 KB。一方面，JavaScript 确实非常适合作为 web 应用的开发语言，另一方面，JavaScript
+的执行性能成了制约开发大型复杂 web 应用系统的关键因素。
 
-V8 是一个新的 JavaScript 引擎，主要用于解析执行大型 web 应用。充分的 benchmark 显示，V8 引擎的执行速度比现行主流
-JS 引擎快数倍（包括：IE浏览器的 JScript、火狐浏览的 SpiderMonkey，以及 Safari 浏览器的 JavaScriptCore）。
+V8 是一个全新的 JavaScript 引擎，专门用于快速执行大型、复杂 web 应用。充分的 benchmark 数据显示，V8 引擎 JavaScript
+脚本的执行速度比现行主流 JS 引擎快数倍（IE浏览器的 JScript、火狐浏览的 SpiderMonkey，以及 Safari 浏览器的 JavaScriptCore）。
 如果您的 web 应用正受限于 JavaScript 执行速度的影响，推荐您换成 V8 引擎，将能极大提升系统的性能。当然，具体能提升多少，
-取决于系统 JavaScript 的复杂度，以及执行场景。使用 V8 引擎，针对 JavaScript 被反复执行的场景，优化效果将会明显优于
+取决于系统 JavaScript 的复杂度，以及具体的执行场景。使用 V8 引擎，针对 JavaScript 被反复执行的场景，优化效果将会明显优于
 JavaScript 单次执行的场景。
 
 V8 实现高性能的三个关键特性如下：
