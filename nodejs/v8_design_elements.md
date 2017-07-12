@@ -50,9 +50,37 @@ function Point(x, y) {
 
 随即执行 Point 构造函数中的第一条语句 `this.x = x` 创建新的属性值 `x`，V8 执行：
 
-创建新的 hidden class，名为 C1，C1 中包含 Point 对象 `x` 属性的相关信息，`x` 属性值存放在 Point 对象 offset 0 的位置。
+在 C0 的基础上创建新的 hidden class，名为 C1，C1 中包含 Point 对象 `x` 属性的相关信息，`x` 属性值存放在 Point 对象 offset 0 的位置。
 将 Point 对象的 hidden class 由 C0 变成 C1。
 
 ![C1](./img/map_trans_b.png)
 
+继续执行 Point 构造函数中的第二条语句 `this.y = y` 创建新的属性值 `y`，V8 执行：
 
+在 C1 的基础上创建新的 hidden class，名为 C2，C1 中包含 Point 对象 `y` 属性的相关信息，`y` 属性值存放在 Point 对象 offset 1 的位置。
+将 Point 对象的 hidden class 由 C1 变成 C2。
+
+![C2](./img/map_trans_c.png)
+
+咋一看，上述机制略显复杂，Object 对象中每次新增属性值，都要重新创建 hidden class，实现上并不见得能够提升对象属性的访问效率。深入思考一下，
+新创建的 hidden class 结构是可以多次复用的，针对同一类型的 Object 对象，初次创建的时候需要构建 hidden class 结构，后面再创建相同的 Object
+实例，就可以直接复用之前的 hidden class 结构。第二次创建 Point 对象时：
+
+* 初始化 Point 对象，对象不包含任何属性值，hidden class 指向 C0
+
+* Point 对象添加 `x` 属性，hidden class 由 C0 变为 C1，并将 `x` 属性值写入 C1 指定的 offset 0 位置
+
+* Point 对象添加 `y` 属性，hidden class 由 C1 变为 C2，并将 `y` 属性值写入 C2 指定的 offset 1 位置
+
+相较于绝大多数面向对象的编程语言，JavaScript 以支持灵活的动态类型著称。有充分的实际运行数据显示，绝大部分 JavaScript 应用种，存在很大比例的执行
+cases 都符合上述共享数据结构的模型。
+
+使用 hidden class 机制带了两个好处：
+
+1. Object 对象中访问属性值不需要查询字典，直接定位属性值
+
+2. V8 可以充分利用经典的 class-based 优化方法，`inline caching` 优化执行
+
+更多信息可参考 [Efficient Implementation of the Smalltalk-80 System](http://portal.acm.org/citation.cfm?id=800017.800542)
+
+## Dynamic Machine Code Generation
