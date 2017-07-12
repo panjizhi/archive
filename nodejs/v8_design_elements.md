@@ -106,3 +106,22 @@ jne <inline cache miss>
 mov eax,[ebx, <cached x offset>]
 ```
 
+如果 hidden class 命中，直接访问 Point 对象 `x` 属性值，如果 hidden class 未命中，跳转 `inline cache` 优化前的执行流程。实际执行数据显示，多数情况下都能命中。
+
+针对同一种类型的对象实例频繁访问的场景，也即是 `inline cache` 高命中率的场景。综合使用 hidden class 属性访问机制、`inline cache` 优化和机器码编译优化，
+能极大提高 JavaScript 代码的执行效率。`inline cache` 命中率越高，优化效果就越接近静态语言。
+
+
+## Efficient Garbage Collection
+
+V8 通过垃圾回收机制回收不再需要的内存空间（Object 数据）。V8 引擎的实现了更精准高效的垃圾回收，做到 Object 内存分配更快、回收暂停更短、并解决了内存泄露问题。
+V8 垃圾回收机制有如下特点：
+
+1. 执行垃圾回收时停止全部执行任务
+
+2. 多数垃圾回收过程中，仅处理部分 Object 堆，尽量减少任务暂停时间
+
+3. 精确记录全部 Object 和指针在内存中的状态，避免识别不准导致的内存泄露
+
+V8 引擎中的 Object heap 分为两块：一块存放新创建的 Object 对象（`新区块`），一块存放经过单轮垃圾回收之后依然存在的 Object 对象（`旧区块`）。
+每轮垃圾回收过后，如果有 Object 从 `新区块` 移动到 `旧区块`，V8 更新所有 Object 和 `指针` 的记录信息。
