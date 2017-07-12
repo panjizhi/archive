@@ -84,3 +84,25 @@ cases 都符合上述共享数据结构的模型。
 更多信息可参考 [Efficient Implementation of the Smalltalk-80 System](http://portal.acm.org/citation.cfm?id=800017.800542)
 
 ## Dynamic Machine Code Generation
+
+V8 引擎在首次执行 JavaScript 代码时直接将其编译成机器码执行。没有中间码，也没有解释器。V8 执行时，会对使用 `inline cache` 优化过的 Object 属性访问代码进行校正。
+
+在访问给定对象的属性之前，V8 首先确定了当前对象的 hidden class。利用局部访问原理，V8 引擎假定在当前代码段中，后续所有的 Object 属性访问都使用相同的 hidden class，
+也即是已经确定了的 hidden class。使用此 hidden class 中的信息对 `inline cache` 优化过的属性访问代码进行优化。如果预测成功，直接操作 Object 的属性值，如果预测失败，
+执行 `inline cache` 优化前的流程。
+
+比如：JavaScript 访问 Point 对象中的 `x` 属性：
+
+```js
+point.x
+```
+
+V8 生成的机器码如下：
+
+```assembly
+# ebx = the point object
+cmp [ebx,<hidden class offset>],<cached hidden class>
+jne <inline cache miss>
+mov eax,[ebx, <cached x offset>]
+```
+
