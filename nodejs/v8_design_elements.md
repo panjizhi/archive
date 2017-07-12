@@ -48,4 +48,11 @@ function Point(x, y) {
 
 ![C0](./img/map_trans_a.png)
 
+随即执行 Point 构造函数中的第一条语句 `this.x = x` 创建新的属性值 `x`，V8 执行：
+
+创建新的 hidden class，名为 C1，C1 中包含 Point 对象 `x` 属性的相关信息，`x` 属性值存放在 Point 对象 offset 0 的位置。
+将 Point 对象的 hidden class 由 C0 变成 C1。
+
+![C1](./img/map_trans_b.png)
+
 
