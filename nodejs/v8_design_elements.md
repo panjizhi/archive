@@ -24,11 +24,11 @@ V8 实现高性能的三个关键特性如下：
 
 ## Fast Property Access
 
-JavaScript 是一种动态编程语言：运行时可以随时向 Object 数据中添加新的属性，也可以随时将 Object 对象中的属性删除。也即是
-Object 的属性值是随时可变的。大多数 JavaScript 引擎使用类似字典的数据结构来存储 Object 的属性值。Object 中每次属性操作
-都需要动态查询字典进而获得属性在内存中的位置。相较于 JAVA、Smalltalk 的实现方式，JavaScript 的实现方式的访问性能是非常缓慢的。
-针对 JAVA 和 Smalltalk，因为 class 的结构是固定已知的，编译器编译过程中，instance 的各个属性值位置就已经固定下来。因此
-instance 的属性值就不涉及查询，一个操作指令即可完成。
+JavaScript 属于动态编程语言：代码运行时，可随时向 Object 数据中添加新属性，也可以随时将属性从 Object 对象中删除。也即是说
+Object 的属性集合是随时可变的。大多数 JavaScript 引擎使用类似字典的数据结构来存储 Object 的属性。针对 Object 的每一次属性操作，
+都需要动态查询字典才能获得待操作属性在内存中的具体位置。相较于 JAVA、Smalltalk 这类强类型语言的实现方式，JavaScript
+实现的属性访问机制就显得非常缓慢。针对 JAVA 和 Smalltalk，因为 class 的结构是固定已知的，编译器编译过程中，class 对应的每个 instance
+实例，其拥有的各个属性值位置偏移（offset）已经确定。因此 instance 中属性的访问就是单纯的内存操作，不涉及任何查询，一个操作指令即可完成。
 
 为了降低 JavaScript 中 Object 属性值的访问时间，V8 引擎抛弃了动态字典查询的实现机制。而是借鉴了同样是 prototype-based
 编程语言 Self 的实现机制（[参考](http://research.sun.com/self/papers/implementation.html)），V8 在 Object
