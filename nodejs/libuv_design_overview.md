@@ -28,74 +28,70 @@
 
 
 
-`The I/O (or event) loop` 是 libuv 的核心部分，为所有的 I/O 操作提供执行上下文，每一个 event loop 都是单线程模式运行。当然，也可以同时运行多个 libuv 实例，
-但是必须保证每个 libuv 实例都运行在单独的线程中。 一般情况下，除非有特殊说明，`The I/O (or event) loop` 模型都是非线程安全的。
+`The I/O (or event) loop` 是 libuv 的核心部分，为所有的 I/O 操作提供执行上下文，每一个 event loop 都是以单线程运行。当然，也可以同时运行多个 libuv 实例，
+但是必须保证每个 libuv 实例都运行在单独的线程中。一般情况下，除非有特殊说明，`The I/O (or event) loop` 模型都是非线程安全的。
 
-`event loop` 实现的单线程异步 I/O 访问机制非常简单：所有的 I/O 操作都执行在非阻塞模式下，采用系统内置支持的轮询机制（`epoll` on Linux, `kqueue` on OSX and other BSDs, `event ports` on SunOS and `IOCP` on Windows）。在 `event loop` 轮转中的特定时期，执行流程会阻塞进入等待，直到有 I/O 操作对应的事件出现，立即处理接收到的事件并处理回调。
+`event loop` 实现的单线程异步 I/O 访问机制非常简单：所有的 I/O 操作都执行在非阻塞模式下，采用系统内置支持的轮询机制（`epoll` on Linux, `kqueue` on OSX and other BSDs, `event ports` on SunOS and `IOCP` on Windows）。在 `event loop` 轮转中的特定时期，执行流程会阻塞等待，直到 I/O 操作对应的事件出现，立即处理接收到的事件并执行对应操作。
 
-下图是 event loop 轮询流程图：
+下图是 event loop 轮询执行流程：
 
 ![loop_iteration.png](./img/loop_iteration.png)
 
-1. `event loop` 每次轮转开始前记录轮转开始时间 `now`，用于计算与时间相关的系统调用
+> 1. The loop concept of ‘now’ is updated. The event loop caches the current time at the start of the event loop tick in order to reduce the number of time-related system calls.
 
-2. 如果 loop alive，继续执行轮转，否则退出执行。当存在 active handles、active requests、closing handles 时，就可以任务 loop alive
+> 2. If the loop is alive an iteration is started, otherwise the loop will exit immediately. So, when is a loop considered to be alive? If a loop has active and ref’d handles, active requests or closing handles it’s considered to be alive.
 
-3. 执行定时回调（已过了延迟阈值）
+> 3. Due timers are run. All active timers scheduled for a time before the loop’s concept of now get their callbacks called.
 
-4. Pending callbacks are called. All I/O callbacks are called right after polling for I/O, for the most part. There are cases, however, 
-in which calling such a callback is deferred for the next loop iteration. If the previous iteration deferred any I/O callback it will be run at this point.
+> 4. Pending callbacks are called. All I/O callbacks are called right after polling for I/O, for the most part. There are cases, however, 
+> in which calling such a callback is deferred for the next loop iteration. If the previous iteration deferred any I/O callback it will be run at this point.
 
-5. Idle handle callbacks are called. Despite the unfortunate name, idle handles are run on every loop iteration, if they are active.
+> 5. Idle handle callbacks are called. Despite the unfortunate name, idle handles are run on every loop iteration, if they are active.
 
-6. Prepare handle callbacks are called. Prepare handles get their callbacks called right before the loop will block for I/O.
+> 6. Prepare handle callbacks are called. Prepare handles get their callbacks called right before the loop will block for I/O.
 
-7. Poll timeout is calculated. Before blocking for I/O the loop calculates for how long it should block. These are the rules when calculating the timeout:
+> 7. Poll timeout is calculated. Before blocking for I/O the loop calculates for how long it should block. These are the rules when calculating the timeout:
 
-    * If the loop was run with the UV_RUN_NOWAIT flag, the timeout is 0.
+>     * If the loop was run with the UV_RUN_NOWAIT flag, the timeout is 0.
 
-    * If the loop is going to be stopped (uv_stop() was called), the timeout is 0.
+>     * If the loop is going to be stopped (uv_stop() was called), the timeout is 0.
 
-    * If there are no active handles or requests, the timeout is 0.
+>     * If there are no active handles or requests, the timeout is 0.
 
-    * If there are any idle handles active, the timeout is 0.
+>     * If there are any idle handles active, the timeout is 0.
 
-    * If there are any handles pending to be closed, the timeout is 0.
+>     * If there are any handles pending to be closed, the timeout is 0.
 
-    * If none of the above cases matches, the timeout of the closest timer is taken, or if there are no active timers, infinity.
+>     * If none of the above cases matches, the timeout of the closest timer is taken, or if there are no active timers, infinity.
 
-8. The loop blocks for I/O. At this point the loop will block for I/O for the duration calculated in the previous step.
-All I/O related handles that were monitoring a given file descriptor for a read or write operation get their callbacks called at this point.
+> 8. The loop blocks for I/O. At this point the loop will block for I/O for the duration calculated in the previous step.
+> All I/O related handles that were monitoring a given file descriptor for a read or write operation get their callbacks called at this point.
 
-9. Check handle callbacks are called. Check handles get their callbacks called right after the loop has blocked for I/O. 
-Check handles are essentially the counterpart of prepare handles.
+> 9. Check handle callbacks are called. Check handles get their callbacks called right after the loop has blocked for I/O. 
+> Check handles are essentially the counterpart of prepare handles.
 
-10. Close callbacks are called. If a handle was closed by calling uv_close() it will get the close callback called.
+> 10. Close callbacks are called. If a handle was closed by calling uv_close() it will get the close callback called.
 
-11. Special case in case the loop was run with UV_RUN_ONCE, as it implies forward progress. It’s possible that no I/O callbacks were fired after blocking for I/O, 
-but some time has passed so there might be timers which are due, those timers get their callbacks called.
+> 11. Special case in case the loop was run with UV_RUN_ONCE, as it implies forward progress. It’s possible that no I/O callbacks were fired after blocking for I/O, 
+> but some time has passed so there might be timers which are due, those timers get their callbacks called.
 
-12. Iteration ends. If the loop was run with UV_RUN_NOWAIT or UV_RUN_ONCE modes the iteration ends and uv_run() will return. 
-If the loop was run with UV_RUN_DEFAULT it will continue from the start if it’s still alive, otherwise it will also end.
+> 12. Iteration ends. If the loop was run with UV_RUN_NOWAIT or UV_RUN_ONCE modes the iteration ends and uv_run() will return. 
+> If the loop was run with UV_RUN_DEFAULT it will continue from the start if it’s still alive, otherwise it will also end.
 
 **_`libuv` 中的文件 I/O 操作使用了线程池，而网络 I/O 操作都是单线程_**
 
 
 ## File I/O
 
-Unlike network I/O, there are no platform-specific file I/O primitives libuv could rely on, so the current approach is to run blocking file I/O operations in a thread pool.
+Unlike network I/O, there are no platform-specific file I/O primitives libuv could rely on, so the current approach is to run blocking file I/O operations in a `thread pool`.
 
 For a thorough explanation of the cross-platform file I/O landscape, checkout [this post](http://blog.libtorrent.org/2012/10/asynchronous-disk-io/).
 
-libuv currently uses a global thread pool on which all loops can queue work on. 3 types of operations are currently run on this pool:
+**_libuv currently uses a global thread pool on which all loops can queue work on._** 3 types of operations are currently run on this pool:
 
 * File system operations
 
 * DNS functions (getaddrinfo and getnameinfo)
 
 * User specified code via uv_queue_work()
-
-
-
-
 
