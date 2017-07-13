@@ -38,43 +38,26 @@
 ![loop_iteration.png](./img/loop_iteration.png)
 
 > 1. The loop concept of ‘now’ is updated. The event loop caches the current time at the start of the event loop tick in order to reduce the number of time-related system calls.
-
 > 2. If the loop is alive an iteration is started, otherwise the loop will exit immediately. So, when is a loop considered to be alive? If a loop has active and ref’d handles, active requests or closing handles it’s considered to be alive.
-
 > 3. Due timers are run. All active timers scheduled for a time before the loop’s concept of now get their callbacks called.
-
 > 4. Pending callbacks are called. All I/O callbacks are called right after polling for I/O, for the most part. There are cases, however, 
 > in which calling such a callback is deferred for the next loop iteration. If the previous iteration deferred any I/O callback it will be run at this point.
-
 > 5. Idle handle callbacks are called. Despite the unfortunate name, idle handles are run on every loop iteration, if they are active.
-
 > 6. Prepare handle callbacks are called. Prepare handles get their callbacks called right before the loop will block for I/O.
-
 > 7. Poll timeout is calculated. Before blocking for I/O the loop calculates for how long it should block. These are the rules when calculating the timeout:
-
 >     * If the loop was run with the UV_RUN_NOWAIT flag, the timeout is 0.
-
 >     * If the loop is going to be stopped (uv_stop() was called), the timeout is 0.
-
 >     * If there are no active handles or requests, the timeout is 0.
-
 >     * If there are any idle handles active, the timeout is 0.
-
 >     * If there are any handles pending to be closed, the timeout is 0.
-
 >     * If none of the above cases matches, the timeout of the closest timer is taken, or if there are no active timers, infinity.
-
 > 8. The loop blocks for I/O. At this point the loop will block for I/O for the duration calculated in the previous step.
 > All I/O related handles that were monitoring a given file descriptor for a read or write operation get their callbacks called at this point.
-
 > 9. Check handle callbacks are called. Check handles get their callbacks called right after the loop has blocked for I/O. 
 > Check handles are essentially the counterpart of prepare handles.
-
 > 10. Close callbacks are called. If a handle was closed by calling uv_close() it will get the close callback called.
-
 > 11. Special case in case the loop was run with UV_RUN_ONCE, as it implies forward progress. It’s possible that no I/O callbacks were fired after blocking for I/O, 
 > but some time has passed so there might be timers which are due, those timers get their callbacks called.
-
 > 12. Iteration ends. If the loop was run with UV_RUN_NOWAIT or UV_RUN_ONCE modes the iteration ends and uv_run() will return. 
 > If the loop was run with UV_RUN_DEFAULT it will continue from the start if it’s still alive, otherwise it will also end.
 
