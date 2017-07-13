@@ -1,9 +1,9 @@
 # `libuv` Design overview
 
-`libuv` 最早是专门为 NodeJS 开发的一个基础库，实现事件驱动的 I/O 访问模型。目前已实现跨平台支持。
+`libuv` 最早是专门为 NodeJS 开发的一个基础库，实现基于事件驱动的异步 I/O 访问模型。目前已实现跨平台支持。
 
 `libuv` 基于系统内置支持的轮询机制（ `epoll` on Linux, `kqueue` on OSX and other BSDs, `event ports` on SunOS and `IOCP` on Windows），
-抽象封装 I/O 操作，同时抽象出 `handles`，`streams` 接口，用于处理 socket 操作，另外还实现了跨平台的文件 I/O 操作，并提供线程管理功能函数。
+抽象封装 I/O 操作，同时抽象出 `handles`，`streams` 接口，用于处理 socket 相关操作，还实现了跨平台的文件 I/O 操作，并提供线程功能函数。
 
 下图是 libuv 的基本组织结构图：
 
@@ -14,10 +14,14 @@
 
 `libuv` 提供了两种抽象结构：`handles` 和 `requests`，与 `event loop` 结合使用。
 
-`handles` 一般是常驻对象，指代具体事件绑定的操作，在所绑定的事件发生时，执行对应的 `handles` 处理事件。比如：TCP server 的 handle 每次收到新的连接，
-对应的 connection callback 就会被调用执行。
+`handles` 一般是常驻对象，用于响应特定的事件，执行事件处理回调。在绑定的事件发生时，对应的 `handles` 被调用执行，处理事件。比如：TCP server 的 handle 每次收到新的连接，
+调用执行对应的 connection callback。
 
 `requests` 一般是指某一个具体的行为。
+
+> Requests represent (typically) short-lived operations. 
+> These operations can be performed over a handle: write requests are used to write data on a handle; 
+> or standalone: getaddrinfo requests don’t need a handle they run directly on the loop.
 
 
 ## The I/O loop
