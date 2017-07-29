@@ -17,7 +17,6 @@ socket 和其他实体，同时还包括文件 I/O 操作和线程相关的功�
 `handles` 一般是常驻对象，用于响应特定的事件，执行事件处理回调。事件发生时，事件对应的 `handles` 被调用执行。比如：
 
 > * A prepare handle gets its callback called once every loop iteration when active.
-
 > * A TCP server handle that gets its connection callback called every time there is a new connection.
 
 `requests` 一般是指某一个具体的行为。
