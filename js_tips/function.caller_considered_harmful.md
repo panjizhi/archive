@@ -18,7 +18,7 @@
 
 ## V8 实现(Chrome, Node.js)
 
-当代码中调用 `foo.caller` 时，V8 处理过程如下：
+代码中调用 `foo.caller` 时，V8 处理过程如下：
 
 - V8 引擎监测最新的 foo 实例，此时 foo 实例尚未完成退出
 
