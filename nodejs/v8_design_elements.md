@@ -14,6 +14,8 @@ V8 是一个全新的 JavaScript 引擎，专门用于快速执行大型、复�
 取决于系统 JavaScript 的复杂度，以及具体的执行场景。使用 V8 引擎，针对 JavaScript 被反复执行的场景，优化效果将会明显优于
 JavaScript 单次执行的场景。
 
+V8 实现 ECMA-262 规范，Document Object Model (DOM) 由浏览器实现，而非 V8。
+
 V8 实现高性能的三个关键特性如下：
 
 1. Fast Property Access
