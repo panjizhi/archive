@@ -7,6 +7,14 @@
 使用较少的线程，意味着更少的维护开销（线程管理，上下文切换），也就能将更多的系统资源用于任务处理。
 
 由于多个请求复用一个线程，这就要求开发者合理规划针对单个 request 的处理响应，一旦某个 request 的请求阻塞，将导致后续多个请求阻塞。
-一个行之有效的原则是：*_ Node is fast when the work associated with each client at any given time is "small"._*
+一个行之有效的原则是：
+
+> Node is fast when the work associated with each client at any given time is "small".
+
+## 为什么需要避免在 Event Loop 和 Worker Pool 中出现阻塞？
+
+
+
+
 
 
