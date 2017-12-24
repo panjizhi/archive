@@ -1,6 +1,6 @@
 # Node.js 简介
 
-作为一个基于 **_事件驱动_**，实现 **_异步、非阻塞 I/O 操作模型_** 的 JavaScript runtime。
+作为一个基于 **_事件驱动_**，实现 **_异步、非阻塞 I/O 模型_** 的 JavaScript runtime。
 Node.js 特别适合用来构建高并发、高吞吐的网络应用。
 
 从 `hello world` 开始：
