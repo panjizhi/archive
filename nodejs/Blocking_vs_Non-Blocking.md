@@ -30,7 +30,7 @@ const data = fs.readFileSync('/file.md'); // blocks here until file is read
 
 异步访问文件：
 
-```
+```js
 const fs = require('fs');
 fs.readFile('/file.md', (err, data) => {
   if (err) throw err;
