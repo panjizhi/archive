@@ -1,9 +1,9 @@
 # `libuv` Design overview
 
-`libuv` 最早是专门为 Node.js 开发的一个基础库，实现事件驱动的异步 I/O 操作。目前已完全支持跨平台。
+`libuv` 最早是专门为 Node.js 开发的一个基础库，实现事件驱动的异步 I/O 操作。目前已支持跨平台。
 
-`libuv` 不仅实现了对系统 I/O 轮询机制的封装，还提供 `handlers` 和 `streams` 两种抽象接口，
-用于处理 socket 和其他实体类型，除此之外，还提供了文件 I/O 操作和线程相关的功能函数。
+`libuv` 不仅实现了对系统 I/O 轮询机制的封装：抽象出 `handlers` 和 `streams` 两种结构，
+用于处理 socket 和其他实体类型，还提供了文件 I/O 操作和线程相关的功能函数。
 
 下图是 libuv 的基本组织结构图：
 
@@ -12,7 +12,7 @@
 
 ## handles and requests
 
-`libuv` 提供了两种抽象结构：`handles` 和 `requests`，用于与 `event loop` 配合使用。
+`libuv` 提供了两种抽象结构：`handles` 和 `requests`，与 `event loop` 配合使用。
 
 `handles` 一般是常驻对象，用于响应特定的事件，执行事件处理回调。事件发生时，对应的 `handles` 被调用执行。比如：
 
@@ -88,4 +88,3 @@ libuv 中的线程池是全局的，每次 loop 都共用同一线程池。目�
 * 文件操作
 * DNS 操作 ( `getaddrinfo` and `getnameinfo` )
 * 用户通过 `uv_queue_work()` 指定的任务
-
