@@ -10,7 +10,7 @@ var server = http.createServer(function(request, response) {
 });
 ```
 
-每当 server 收到来自客户端的 request 请求，server 创建时指定的回调函数将被调用。
+每当 server 收到来自客户端的 request 请求，`http.createServer` 参数指定的回调函数将被调用。
 
 `http.createServer()` 的返回值是一个 `EventEmitter` 实例对象，上述代码等价：
 
@@ -23,7 +23,7 @@ server.on('request', function(request, response) {
 
 ## Method, URL and Headers
 
-处理 request 的回调函数接收两个参数：request 和 response。request 对象是一个 `IncomingMessage` 实例，
+响应 `request` 事件的回调函数接收两个参数：request 和 response。request 对象是一个 `IncomingMessage` 实例，
 包含 http 请求的所有信息。
 
 ```js
@@ -34,9 +34,11 @@ var headers = request.headers;
 var userAgent = headers['user-agent'];
 ```
 
+*_无论客户端发出的请求 headers 是大写还是小写，`request.headers` 中各字段名称都是小写。因此，特定情况下可以通过 `rawHeaders` 获得原始请求头信息_*
+
 ## Request Body
 
-对于 POST、PUT 类型的请求，我们需要提取请求中的数据。
+对于 POST、PUT 类型的请求，需要提取请求中的数据。
 
 ```js
 var body = [];
@@ -56,7 +58,7 @@ request.on('data', function(chunk) {
 
 ## 错误处理
 
-request 对象是一个实现了 `ReadableStream` 接口 的 `EventEmitter` 实例，错误发生时，
+request 对象是一个实现了 `ReadableStream` 接口的 `EventEmitter` 实例，错误发生时，
 自动触发 `error` 事件。如果 `error` 事件没有绑定处理函数，Node.js 将直接抛出错误异常，
 程序直接退出。
 
@@ -89,7 +91,7 @@ http.createServer(function(request, response) {
 }).listen(8080); // Activates this server, listening on port 8080.
 ```
 
-运行上面的代码，使用浏览器访问 `http://localhost:8080/`，将会收到连接超时的错误。这是因为到目前为止，
+运行上述代码，使用浏览器访问 `http://localhost:8080/`，将会收到连接超时的错误。这是因为到目前为止，
 尚未向客户端返回任何数据（ 请求回调函数中的 response 参数）。
 
 ## HTTP 状态码
