@@ -8,6 +8,6 @@
 
 - 使用 `--inspect` 选项
 
-- 向 Node 进程发送 `SIGUSR1` 信号: `kill -s SIGUSR1 ${pid}`
+- 向 Node 进程发送 `SIGUSR1` 信号: `kill -s SIGUSR1 ${pid}` （适用于 cluster 模式下）
 
 [Debugging Guide](https://nodejs.org/en/docs/guides/debugging-getting-started/)
