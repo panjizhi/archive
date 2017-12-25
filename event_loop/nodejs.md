@@ -122,7 +122,7 @@ _*注：为避免 poll phase 长期占用执行进程而陷入`饥饿`状态，l
 
 #### I/O callbacks
 
-执行系统操作相关的回调，比如：TCP 错误处理。当 TCP 在尝试建立连接时收到 `ECONNREFUSED`，一些 *nix 系统期望报告此类错误，
+执行系统操作相关的回调，比如：TCP 错误处理。当 TCP 在尝试建立连接时收到 `ECONNREFUSED`，一些 \*nix 系统期望报告此类错误，
 处理错误的回调函数将在 I/O callbacks 得以执行。
 
 
