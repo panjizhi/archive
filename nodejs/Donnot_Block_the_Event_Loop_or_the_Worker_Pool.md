@@ -70,5 +70,53 @@ Worker 池则是维护了一个任务队列，存放待处理任务，每个 Wor
 
 ## 避免阻塞 Event Loop
 
+Node.js 中的 Event Loop 是单线程模式运行的，所有的网络 request 请求和 response 响应都是在 Event Loop 中处理。任何一处阻塞都将导致后续的 request 得不到及时处理，进而影响服务器的吞吐量。
+开发者需要做的是保证任意 request 的响应回调都能快速完成（包括所有的微任务：process.nextTick, Promises, Object.observe, MutationObserver）。
+
+一般来讲，可以通过 **运算的时间复杂度** 来衡量函数的执行时长。
+
+- Example 1: A constant-time callback.
+
+```js
+app.get('/constant-time', (req, res) => {
+  res.sendStatus(200);
+});
+```
+
+- Example 2: An O(n) callback
+
+```js
+app.get('/countToN', (req, res) => {
+  let n = req.query.n;
+
+  // n iterations before giving someone else a turn
+  for (let i = 0; i < n; i++) {
+    console.log(`Iter {$i}`);
+  }
+
+  res.sendStatus(200);
+});
+```
+
+- Example 3: An O(n^2) callback.
+
+```js
+app.get('/countToN2', (req, res) => {
+  let n = req.query.n;
+
+  // n^2 iterations before giving someone else a turn
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      console.log(`Iter ${i}.${j}`);
+    }
+  }
+
+  res.sendStatus(200);
+});
+```
+
+### 开发过程中需要特别注意的点
+
+Node.js 底层使用 Google 的 V8 引擎解析执行 JavaScript 脚本，针对多数的操作，V8 已经足够快，有两个点需要特别注意：**正则表达式** 和 **JSON 操作**。
 
 
