@@ -119,4 +119,78 @@ app.get('/countToN2', (req, res) => {
 
 Node.js 底层使用 Google 的 V8 引擎解析执行 JavaScript 脚本，针对多数的操作，V8 已经足够快，有两个点需要特别注意：**正则表达式** 和 **JSON 操作**。
 
+针对复杂系统，开发者需要做好 **最坏的打算**，通过限制单次 request 事件回调处理的操作复杂度，控制在最坏情况下，回调执行时耗依然在可接受的范围。
+
+### 阻塞 Event Loop: `REDOS`
+
+实现 Event Loop 阻塞最常用的方法是利用 *vulnerable* 的正则表达式。通过精心构造输入，触发正则表达式执行引擎花费超长时间进行处理，进一步导致 Event Loop 阻塞，
+最终实现基于正则表达式的拒绝服务攻击。
+
+- A REDOS example
+
+```js
+app.get('/redos-me', (req, res) => {
+  let filePath = req.query.filePath;
+
+  // REDOS
+  if (fileName.match(/(\/.+)+$/)) {
+    console.log('valid path');
+  }
+  else {
+    console.log('invalid path');
+  }
+
+  res.sendStatus(200);
+});
+```
+
+如果 `filePath` 取值为 `///.../\n`(换行符前有 100 个 `/`)，将导致 Event Loop 阻塞。
+
+- 规避 REDOS
+
+开发过程中可以通过如下工具对书写的正则表达式进行校验：[safe-regex](https://github.com/substack/safe-regex)，[rxxr2](http://www.cs.bham.ac.uk/~hxt/research/rxxr2/)。
+
+如果开发过程中的匹配需求是典型、常用的场景，比如：URL，文件路径。可以考虑直接使用现成的实现：[regexp library](http://www.regexlib.com/)，[ip-regex](https://www.npmjs.com/package/ip-regex)。
+
+### 阻塞 Event Loop：Node 核心模块
+
+- [Encryption](https://nodejs.org/api/crypto.html)
+
+- [Compression](https://nodejs.org/api/zlib.html)
+
+- [File system](https://nodejs.org/api/fs.html)
+
+- [Child process](https://nodejs.org/api/child_process.html)
+
+上述核心模块提供的接口属于长时耗操作，此类接口的调用极易导致 Event Loop 阻塞。这一类接口主要用于本地命令行脚本程序，而应避免用于 Web 服务上下文。
+
+在 Node 实现的 Web 服务中，一定要避免调用下面的接口：
+
+- Encryption:
+
+    * crypto.randomBytes (synchronous version)
+
+    * crypto.randomFillSync
+
+    * crypto.pbkdf2Sync
+
+    * You should also be careful about providing large input to the encryption and decryption routines.
+
+- Compression:
+
+    * zlib.inflateSync
+
+    * zlib.deflateSync
+
+- File system:
+
+    * Do not use the synchronous file system APIs. For example, if the file you access is in a distributed file system like NFS, access times can vary widely.
+
+- Child process:
+
+    * child_process.spawnSync
+
+    * child_process.execSync
+
+    * child_process.execFileSync
 
