@@ -168,19 +168,19 @@ app.get('/redos-me', (req, res) => {
 
 - Encryption:
 
-    * crypto.randomBytes (synchronous version)
+    * `crypto.randomBytes` (synchronous version)
 
-    * crypto.randomFillSync
+    * `crypto.randomFillSync`
 
-    * crypto.pbkdf2Sync
+    * `crypto.pbkdf2Sync`
 
     * You should also be careful about providing large input to the encryption and decryption routines.
 
 - Compression:
 
-    * zlib.inflateSync
+    * `zlib.inflateSync`
 
-    * zlib.deflateSync
+    * `zlib.deflateSync`
 
 - File system:
 
@@ -188,9 +188,102 @@ app.get('/redos-me', (req, res) => {
 
 - Child process:
 
-    * child_process.spawnSync
+    * `child_process.spawnSync`
 
-    * child_process.execSync
+    * `child_process.execSync`
 
-    * child_process.execFileSync
+    * `child_process.execFileSync`
+
+### 阻塞 Event Loop：JSON 操作
+
+`JSON.parse` 和 `JSON.stringify` 同样可以导致 Event Loop 阻塞，随着 JSON 数据的增加，处理时长惊人地增长。开发过程中遇到处理大结构的 JSON 数据时，一定要小心在意。
+
+```js
+var obj = { a: 1 };
+var niter = 20;
+
+var before, res, took;
+
+for (var i = 0; i < len; i++) {
+  obj = { obj1: obj, obj2: obj }; // Doubles in size each iter
+}
+
+before = process.hrtime();
+res = JSON.stringify(obj);
+took = process.hrtime(n);
+console.log('JSON.stringify took ' + took);
+
+before = process.hrtime();
+res = str.indexOf('nomatch');
+took = process.hrtime(n);
+console.log('Pure indexof took ' + took);
+
+before = process.hrtime();
+res = JSON.parse(str);
+took = process.hrtime(n);
+console.log('JSON.parse took ' + took);
+```
+
+针对开发需求中的超大 JSON 数据处理，可以考虑 npm 中的优化模块：
+
+- [JSONStream](https://www.npmjs.com/package/JSONStream)
+
+- [Big-Friendly JSON](https://github.com/philbooth/bfj)
+
+### Event Loop 中复杂操作的处理
+
+针对 Event Loop 中需要执行的复杂运算，有两种方式避免造成 Event Loop 阻塞。分别是：**任务拆分**和**任务下发**。
+
+#### 任务拆分
+
+将复杂任务拆解为多个简单任务，每个 Event Loop 循环处理其中一个子任务。这样，每个 Event Loop 循环都能快速返回结果，保障每个 request 事件都能快速得的响应。
+
+*_利用 JavaScript 闭包特性，很容易实现复杂任务的拆分执行。_*
+
+- 时间复杂度为 O(n) 的原始未拆解任务
+
+```js
+for (let i = 0; i < n; i++)
+  sum += i;
+let avg = sum / n;
+console.log('avg: ' + avg);
+```
+
+- 对任务进行拆解，每个子任务时间复杂度为 O(1)
+
+```js
+function asyncAvg(n, avgCB) {
+  // Save ongoing sum in JS closure.
+  var sum = 0;
+  function help(i, cb) {
+    sum += i;
+    if (i == n) {
+      cb(sum);
+      return;
+    }
+
+    // "Asynchronous recursion".
+    // Schedule next operation asynchronously.
+    setImmediate(help.bind(null, i+1, cb));
+  }
+
+  // Start the helper, with CB to call avgCB.
+  help(1, function(sum){
+      var avg = sum/n;
+      avgCB(avg);
+  });
+}
+
+avg(n, function(avg){
+  console.log('avg of 1-n: ' + avg);
+});
+```
+
+#### 任务下发
+
+任务拆分仅仅是把复杂任务分成多个简单子任务执行，每个子任务依然占用了 Event Loop 的执行时间。针对计算密集型的复杂任务，拆分未必是个好选择，
+最好是将此类任务直接下放到新线程或者新进程中执行。*注意，Event Loop 是单线程模式运行，直接占用 Event Loop 线程的执行时间，将极大影响 Web 服务处理 request 请求的吞吐量。*
+
+
+
 
