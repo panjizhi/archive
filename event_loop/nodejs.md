@@ -76,7 +76,7 @@ _*注：尽管 Windows/Linux 实现上存在差异，但并不影响本文对 Ev
 调用 `setTimeout()` 和 `setInterval()` 返回的 `Timeout` 对象存在 [ref/unref](https://nodejs.org/docs/latest/api/timers.html#timers_class_timeout)
 方法，可以影响 Node.js 对定时回调的判断。
 
-libuv 源码参考：
+**libuv 源码参考：**
 
 ```C++
 int uv_run(uv_loop_t* loop, uv_run_mode mode) {
@@ -136,8 +136,8 @@ int uv_run(uv_loop_t* loop, uv_run_mode mode) {
 
 #### timers
 
-timers 用于在指定的时间延迟后执行回调函数。注意是在 **给定的时间延迟之后** 执行，而不是在 **延迟后精确的时间点** 执行。
-在给定的时间延迟过后，回调函数会尽可能快地被安排执行，实际的执行时间受到系统调度或其他操作的影响而可能被延迟。
+timers 用于在指定的时间延迟后执行回调函数。注意是在 **给定的时间延迟之后** 执行，而不是在 **延迟精确的时间点** 执行。
+在给定的 **threshold** 时间过后，回调函数会尽可能快地被安排执行，实际的执行时间受到系统调度或其他操作的影响而可能被延迟。
 
 _**注：技术上讲，poll phase 影响 timers 的实际执行的时间**_
 
