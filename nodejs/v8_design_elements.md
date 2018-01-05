@@ -4,14 +4,14 @@
 开发者可以十分方便地操作 HTML 元素（比如：表单、frames、图片）。JavaScript 也越来越多地被用来实现动态网页效果。
 到 90 年代后期，大部分 JavaScript 脚本的主要功能是用来响应用户鼠标操作，实现图片的简单切换。
 
-随着 AJAX 的兴起，JavaScript 逐渐成为开发 web 应用的核心技术，比如谷歌公司的 GMail。JavaScript 代码复杂度直线上升，
-从最初的数行代码变为数百 KB。一方面，JavaScript 确实非常适合作为 web 应用的开发语言，另一方面，JavaScript
-的执行性能成了制约开发大型复杂 web 应用系统的关键因素。
+随着 AJAX 的兴起，JavaScript 逐渐成为开发 Web 应用的核心技术，比如谷歌公司的 GMail。JavaScript 代码复杂度直线上升，
+从最初的数行代码变为数百 KB。一方面，JavaScript 确实非常适合作为 Web 应用的开发语言，另一方面，JavaScript
+的执行性能成了制约开发大型复杂 Web 应用系统的关键因素。
 
-V8 是一个全新的 JavaScript 引擎，专门用于快速执行大型、复杂 web 应用。充分的 benchmark 数据显示，V8 引擎 JavaScript
+V8 是一个全新的 JavaScript 引擎，专门针对大型、复杂 Web 应用的快速执行。充分的 benchmark 数据显示，V8 引擎 JavaScript
 脚本的执行速度比现行主流 JS 引擎快数倍（IE浏览器的 JScript、火狐浏览的 SpiderMonkey，以及 Safari 浏览器的 JavaScriptCore）。
-如果您的 web 应用正受限于 JavaScript 执行速度的影响，推荐您换成 V8 引擎，将能极大提升系统的性能。当然，具体能提升多少，
-取决于系统 JavaScript 的复杂度，以及具体的执行场景。使用 V8 引擎，针对 JavaScript 被反复执行的场景，优化效果将会明显优于
+如果您的 Web 应用正受限于 JavaScript 引擎的执行速度，推荐您换成 V8 引擎，将极大提升系统的性能。当然，具体提升多少，
+取决于 Web 应用 JavaScript 的复杂度，以及具体的执行场景。针对 JavaScript 被反复执行的场景，V8 引擎的优化效果将会明显优于
 JavaScript 单次执行的场景。
 
 V8 实现 ECMA-262 规范，Document Object Model (DOM) 由浏览器实现，而非 V8。
@@ -26,13 +26,14 @@ V8 实现高性能的三个关键特性如下：
 
 ## Fast Property Access
 
-JavaScript 属于动态编程语言：代码运行时，可随时向 Object 数据中添加新属性，也可以随时将属性从 Object 对象中删除。也即是说
-Object 的属性集合是随时可变的。大多数 JavaScript 引擎使用类似字典的数据结构来存储 Object 的属性。针对 Object 的每一次属性操作，
-都需要动态查询字典才能获得待操作属性在内存中的具体位置。相较于 JAVA、Smalltalk 这类强类型语言的实现方式，JavaScript
-实现的属性访问机制就显得非常缓慢。针对 JAVA 和 Smalltalk，因为 class 的结构是固定已知的，编译器编译过程中，class 对应的每个 instance
-实例，其拥有的各个属性值位置偏移（offset）已经确定。因此 instance 中属性的访问就是单纯的内存操作，不涉及任何查询，一个操作指令即可完成。
+JavaScript 属于动态编程语言：代码运行时，可随时向 Object 数据类型添加新属性，可以随时将属性从 Object 数据类型中删除。
+也即是说 Object 的属性集合是随时可变的。大多数 JavaScript 引擎使用类似字典的数据结构来存储 Object 的属性。
+针对 Object 的每一次属性操作，需要动态查询字典获得待操作属性在内存中的具体位置。相较于 JAVA、Smalltalk 这类强类型语言的实现方式，
+JavaScript 的属性访问机制就显得非常慢。针对 JAVA 和 Smalltalk，因为 class 的结构是已知并且固定的，编译器编译过程中，
+针对每个 class 实例，其包含的属性值位置偏移（offset）就已经确定。因此，各个 class 实例的属性访问就是单纯的内存操作，
+不涉及任何查询，一个操作指令即可完成。
 
-为了降低 JavaScript 中 Object 属性值的访问时间，V8 引擎摒弃了动态字典查询的实现机制。而是借鉴了同属于 prototype-based 编程语言 Self
+为降低 JavaScript 中 Object 属性值的访问时间，V8 引擎摒弃了动态字典查询的实现机制。借鉴了同属于 prototype-based 编程语言 Self
 的实现机制（[参考](http://research.sun.com/self/papers/implementation.html)），V8 引擎在 Object 属性访问过程中，自动创建 `hidden classes`，
 Object 新增或删除属性时，对应的 `hidden classes` 随之改变。
 
