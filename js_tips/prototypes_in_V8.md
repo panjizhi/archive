@@ -20,7 +20,7 @@ JavaScript 中常规 `Object` 对象的结构模型可参考 [Fast Property Acce
 
 ## Is it a prototype?
 
-问题来了，`prototype` 和常规 Object 对象分别使用不同的处理方式，如何判断一个对象是否是 `prototype` 对象 ?
+问题来了，`prototype` 和常规 Object 对象使用不同的处理方式，如何判断一个对象是否是 `prototype` 对象 ?
 
 ```js
 var o = {x:1};
